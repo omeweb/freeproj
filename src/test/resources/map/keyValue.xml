@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="keyValue">
+
+    <typeAlias alias="KeyValue" type="com.taobao.freeproj.domain.KeyValue" />
+    
+    <resultMap id="defaultMap"  class="KeyValue">
+		<result property="id"       column="id" />
+		<result property="key"      column="key_" />
+		<result property="value"    column="value" />
+		<result property="typeCode"       column="typeCode" />
+		<result property="status"      column="status" />
+		<result property="comment"    column="comment" />
+		<result property="lastUpdateTime"    column="lastUpdateTime" />
+		<result property="creator"    column="creator" />
+		<result property="lastOperator"    column="lastOperator" />
+		<result property="reservedString"    column="reservedString" />
+		<result property="reservedInt"    column="reservedInt" />
+		<result property="sortNumber"    column="sortNumber" />
+	</resultMap>
+   	
+   	<!--2012-04-10 by liusan.dyf，仅仅获取key列表-->
+   	<select id="getKeysByTypeCode" resultClass="String" parameterClass="hashmap">
+ 		SELECT `key_` as `key` FROM $reservedValue$ where typeCode=#typeCode# and status>=0 
+ 		<dynamic>
+ 			<isNotEmpty property="orderBy">
+ 				order by $orderBy$ desc
+ 			</isNotEmpty>
+ 		</dynamic>
+ 		;
+	</select>
+	
+   	<!--这里只拉取正常的kv-->
+	<select id="getListByTypeCode" resultMap="defaultMap" parameterClass="hashmap">
+ 		SELECT * FROM $reservedValue$ where typeCode=#typeCode# and status>=0 
+		<dynamic>
+ 			<isNotEmpty property="orderBy">
+ 				order by $orderBy$ desc
+ 			</isNotEmpty>
+ 		</dynamic>
+ 		;
+	</select>
+	
+	<!--2012-03-31 去掉status限制条件-->
+	<select id="getOne" resultMap="defaultMap" parameterClass="hashmap">
+ 		SELECT * FROM $reservedValue$ where typeCode=#typeCode# and `key_`=#key# limit 1;
+	</select>
+
+	<!--2014-11-17 by 六三-->
+	<select id="getById" resultMap="defaultMap" parameterClass="hashmap">
+ 		SELECT * FROM $reservedValue$ where id=#id#;
+	</select>
+	
+	<!--2011-11-08 value也要求可以模糊查询，强制使用typeCode
+	2012-09-28增加reservedString、reservedInt
+	2012-11-23增加key_pattern，匹配模式自定义
+	-->
+	<sql id="queryWhereClause">
+		typeCode=#typeCode# 
+ 		
+		<dynamic>			
+			<isNotEmpty property="keyword">
+ 				and (`key_` like CONCAT('%',#keyword#,'%') or `value` like CONCAT('%',#keyword#,'%'))
+ 			</isNotEmpty>
+			
+			<isNotEmpty property="key">
+ 				and `key_` like CONCAT(#key#,'%')
+ 			</isNotEmpty>
+			
+			<isNotEmpty property="key_pattern">
+ 				and `key_` like CONCAT(#key_pattern#)
+ 			</isNotEmpty>
+		
+ 			<isNotEmpty property="comment">
+ 				and `comment` like CONCAT('%',#comment#,'%')
+ 			</isNotEmpty>
+			
+			<isNotEmpty property="creator">
+ 				and `creator` = #creator#
+ 			</isNotEmpty>
+			
+			<isNotEmpty property="lastOperator">
+ 				and `lastOperator` = #lastOperator#
+ 			</isNotEmpty>
+			
+			<isNotEmpty property="reservedString">
+ 				and `reservedString` = #reservedString#
+ 			</isNotEmpty>
+			
+			<isNotEmpty property="reservedInt">
+ 				and `reservedInt` = #reservedInt#
+ 			</isNotEmpty>
+			
+			<!--2013-12-05，最后更新时间早于xxx by liusan.dyf-->
+			<isNotEmpty property="minLastUpdateTime">
+				and `lastUpdateTime` &gt; #minLastUpdateTime#
+			</isNotEmpty>
+			
+			<isNotEmpty property="maxLastUpdateTime">
+				and `lastUpdateTime` &lt; #maxLastUpdateTime#
+			</isNotEmpty>
+ 		</dynamic>
+	</sql>
+	
+	<!--2011-11-07 14:51 by 63
+	2012-04-16 追加 dynamic的orderBy by liusan.dyf
+	2012-09-26 增加 noValue by liusan.dyf
+	2012-09-27 增加`creator`,`lastOperator`
+	2014-11-17 orderBy有白名单控制 by 六三
+	-->
+	<select id="getPagedList" resultMap="defaultMap" parameterClass="hashmap">
+ 		SELECT id,`key_`,
+		<dynamic>
+ 			<isNotEmpty property="noValue">
+ 				null as 
+ 			</isNotEmpty>
+ 		</dynamic>
+		`value`,
+		`typeCode`,`comment`,`status`,`lastUpdateTime`,`creator`,`lastOperator`,`reservedString`,`reservedInt`,`sortNumber`
+		FROM $reservedValue$ where 
+ 		<include refid="queryWhereClause" />
+ 		<dynamic>
+ 			<isNotEmpty property="orderBy">
+ 				order by $orderBy$ desc
+ 			</isNotEmpty>
+ 		</dynamic>
+		limit #skip#,#limit#;
+	</select>
+	
+	<!--2011-11-07 15:13 by 63 和getPagedList一起使用-->
+	<select id="getCount" resultClass="int" parameterClass="hashmap">
+ 		SELECT count(0) FROM $reservedValue$ where <include refid="queryWhereClause" />;
+	</select>
+	
+	<!--2012-03-31 by 63
+	2012-10-15 by liusan.dyf 增加key的dynamic属性
+	2014-11-17 增加limit by 六三
+	-->
+	<delete id="delete" parameterClass="hashmap">
+ 		delete FROM $reservedValue$ WHERE typeCode=#typeCode# 
+		<dynamic>
+ 			<isNotEmpty property="key">
+ 				and `key_` = #key# limit 1
+ 			</isNotEmpty>
+ 		</dynamic>
+		;
+	</delete>
+	
+	<!--2012-05-25 by 63
+	2012-05-25 注意，不包括 set
+	2012-09-27 增加lastOperator by liusan.dyf
+	2012-09-28增加reservedString、reservedInt
+	-->
+	<sql id="updateClause">
+		<dynamic>			
+			<isNotEmpty property="status">
+				<isNotEqual prepend="" property="status" compareValue="9527">
+					`status` = #status#,
+				</isNotEqual>
+			</isNotEmpty>
+
+			<!-- 2014-11-17 by 六三 -->
+			<isNotEmpty property="sortNumber">
+				<isNotEqual prepend="" property="sortNumber" compareValue="9527">
+					`sortNumber` = #sortNumber#,
+				</isNotEqual>
+			</isNotEmpty>
+						
+			<isNotEmpty property="value">
+				`value` = #value#,
+			</isNotEmpty>
+			
+			<isNotEmpty property="comment">
+				`comment` = #comment#,
+			</isNotEmpty>
+			
+			<isNotEmpty property="lastOperator">
+				`lastOperator` = #lastOperator#,
+			</isNotEmpty>
+			
+			<isNotEmpty property="reservedString">
+				`reservedString` = #reservedString#,
+			</isNotEmpty>
+			
+			<isNotEmpty property="reservedInt">
+				`reservedInt` = #reservedInt#,
+			</isNotEmpty>
+		</dynamic>
+		lastUpdateTime=now()
+	</sql>
+ 	
+	<!--2012-03-31
+	2014-11-17 增加limit by 六三
+	-->
+	<update id="update" parameterClass="KeyValue">
+		update $reservedValue$ set 
+		<include refid="updateClause"/>
+		WHERE typeCode=#typeCode# and `key_` = #key# limit 1;
+	</update>
+	
+	<!--2012-05-26 by liusan.dyf 后面要接update分句
+	2012-09-26增加creator,lastOperator
+	2012-09-28增加reservedString、reservedInt
+	-->
+	<sql id="insertIgnoreClause">
+		INSERT ignore INTO $reservedValue$ (`key_`,`value`,`typeCode`,`comment`,`status`,`lastUpdateTime`,`creator`,`lastOperator`,`createTime`,reservedString,reservedInt,sortNumber) 
+		VALUES(#key#,#value#,#typeCode#,#comment#,#status#,now(),#creator#,#creator#,now(),#reservedString#,#reservedInt#,#sortNumber#)
+		ON DUPLICATE KEY UPDATE
+	</sql>
+
+	<!--插入失败，原因未知2011-11-04  因为 默认没有开启事务提交 2011-11-05 
+	2012-04-06 增加 ignore
+	2012-04-12 如果没有selectKey，则mapper.insert的返回值为null
+	2012-04-13 selectKey的keyProperty一定要是parameterClass类型的一个属性
+	-->
+	<insert id="insert" parameterClass="KeyValue">
+ 		<include refid="insertIgnoreClause"/>
+		<include refid="updateClause"/>
+		;
+ 		<!--<selectKey resultClass="int" keyProperty="id" >
+	      SELECT row_count() AS ID
+	  </selectKey> -->
+	</insert>
+	
+	<!--2012-05-26 by liusan.dyf
+	从client批量提交KV，无法完整序列化为Collection<KeyValue>，只能是Collection<Map>结构
+	-->
+	<insert id="insert_" parameterClass="hashmap">
+ 		<include refid="insertIgnoreClause"/>
+		<include refid="updateClause"/>
+		;
+	</insert>
+    
+</sqlMap>
