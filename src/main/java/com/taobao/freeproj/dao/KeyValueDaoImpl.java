@@ -30,7 +30,28 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	/**
 	 * 表示分表的表名，用注入的方式赋值 2013-08-02 by liusan.dyf
 	 */
-	private String key;
+	private String key = "common_key_value";
+
+	/**
+	 * 转移到kvdao里面 2015-4-21 10:06:13 by 六三
+	 */
+	public void loadSettings() {
+		// ===加载全局设置，从数据库里加载
+		KeyValue kv = this.getOne("50", "globalSettings");
+		if (kv == null) {
+			return; // 直接退出
+		}
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> settings = tools.Json.toObject(kv.getValue(), Map.class);
+
+		// 2012-02-15
+		if (settings == null) {
+			settings = new HashMap<String, Object>();
+		}
+
+		tools.Global.setSettings(settings);
+	}
 
 	/**
 	 * 2012-03-12 by liusan.dyf 2012-04-11 修改为public，想在子类里重写

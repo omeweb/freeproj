@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="gb2312" ?>
+<!DOCTYPE sqlMapConfig
+              PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" 
+              "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" maxRequests="32"
+		maxSessions="10" maxTransactions="5" useStatementNamespaces="true" />
+		
+	<transactionManager type="JDBC">
+		<dataSource type="SIMPLE">
+			<property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
+			<property name="JDBC.ConnectionURL" value="jdbc:mysql://xxx:3306/test?useUnicode\=true&amp;characterEncoding\=gbk" />
+			<property name="JDBC.Username" value="" />
+			<property name="JDBC.Password" value="" />
+			<property name="Pool.MaximumActiveConnections" value="10" />
+			<property name="Pool.MaximumIdleConnections" value="5" />
+			<property name="Pool.MaximumCheckoutTime" value="360000" />
+			<property name="Pool.TimeToWait" value="500" />
+			
+			<property name="Pool.PingQuery" value="select 1" />
+			<property name="Pool.PingEnabled" value="true" />
+			<property name="Pool.PingConnectionsOlderThan" value="0" />
+			<property name="Pool.PingConnectionsNotUsedFor" value="3600000" /><!-- 对于空闲的连接一个小时检查一次 -->
+		</dataSource>
+		
+		<!-- Legacy DBCP Configuration -->
+		<!-- 
+		<dataSource type="DBCP">
+			<property name="JDBC.Driver" value="com.mysql.jdbc.Driver"/>
+			<property name="JDBC.ConnectionURL" value="${url}"/>
+			<property name="JDBC.Username" value="root"/>
+			<property name="JDBC.Password" value=""/>			
+			<property name="Pool.MaximumActiveConnections" value="10"/>
+			<property name="Pool.MaximumIdleConnections" value="5"/>
+			<property name="Pool.MaximumWait" value="360000"/>
+			<property name="Pool.ValidationQuery" value="select 1"/>			
+		</datasource>
+		-->
+	</transactionManager>
+	
+ 	<sqlMap resource="map/keyValue.xml" />	
+		
+</sqlMapConfig>

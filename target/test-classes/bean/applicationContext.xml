@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd">
+<beans> 
+
+	<!--2012-03-06 by liusan.dyf SpringBeanUtil-->
+	<bean class="tools.SpringContext" />
+	
+	<!-- velocity view begin 使用VELOCITY --> 
+    <!--
+    <bean id="dataSource_"
+		  class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		  p:driverClassName = "com.mysql.jdbc.Driver"
+		  p:url = "jdbc:mysql://***:3306/freeproj_data?useUnicode=true&amp;characterEncoding=gbk"
+		  p:username = "*"
+		  p:password = "*">
+	</bean>
+	-->
+	
+	<!-- 数据源配置,在测试环境使用单连接 -->  
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://***:3306/mtee?useUnicode=true&amp;characterEncoding=GBK&amp;allowMultiQueries=true" />  
+        <property name="username" value="*" />  
+        <property name="password" value="*" />  
+    </bean> 
+	
+	<!--sqlMapClient，可以公用-->
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+      <property name="configLocation">
+         <value>classpath:SqlMapConfig.xml</value>
+      </property> 
+      <property name="dataSource">
+         <ref bean="dataSource" />
+      </property>     
+   </bean>
+   
+   <!--SqlMapClientManager 2012-08-03 by liusan.dyf -->
+	<bean id="sessionBuilder" class="com.taobao.freeproj.orm.ibatis.IbatisSessionBuilder">
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />
+		</property>
+	</bean>
+
+	<!-- 配置 2015-4-8 17:08:46 by 六三 -->
+	<bean class="com.taobao.freeproj.orm.Configuration" init-method="init">
+		<!-- eventContainer -->
+		<property name="eventContainer">
+			<bean class="tools.event.EventContainer">
+				<property name="eventHandlers">
+					<map>
+						<entry>
+							<key>
+								<value>*</value>
+							</key>
+							<list>
+								<bean class="com.taobao.freeproj.test.DefaultEventHandler" />
+							</list>
+						</entry>
+					</map>
+				</property>
+			</bean>
+		</property>
+
+		<!-- builderMap -->
+		<property name="builderMap">
+			<map>
+				<entry key="*" value-ref="sessionBuilder"></entry>
+			</map>
+		</property>
+	</bean>
+    
+    <!--kv的dao，key用来分表
+   2012-04-12修改为KeyValueDaoImplWrapper by liusan.dyf
+   -->
+   <bean id="keyValueDao" class="com.taobao.freeproj.dao.KeyValueDaoImpl">
+     <property name="key">
+         <value>common_key_value</value>
+      </property>
+   </bean>
+</beans>

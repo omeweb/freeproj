@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 夏雷 --> 
+<sqlMap namespace="counter">
+    <typeAlias alias="Counter" type="com.taobao.freeproj.domain.Counter" />
+    <typeAlias alias="Timestamp" type="com.taobao.freeproj.domain.Timestamp" />
+    
+    <resultMap id="defaultMap"  class="Counter">
+		<result property="key"       column="key_" />
+		<result property="value"     column="value" />
+		<result property="timestamp" column="timestamp" />
+		<result property="comment" column="comment" />
+		<result property="lastUpdateTime" column="lastUpdateTime" />
+	</resultMap>
+
+	<!--2012-05-24 增加comment by liusan.dyf-->
+	<insert id="insert" parameterClass="Counter">
+ 		INSERT INTO common_counter (`key_`,`value`,`timestamp`,`comment`) VALUES (#key#,#value#,#timestamp#,#comment#)
+		ON DUPLICATE KEY UPDATE `value`=`value`+ #value#,`lastUpdateTime`=now()
+		<!--2013-09-10 by liusan.dyf-->
+		<dynamic>
+			<isNotEmpty property="comment">
+				,`comment` = #comment# 
+			</isNotEmpty>
+		</dynamic>		
+	</insert>
+	
+	<!--2012-02-29 by liusan.dyf-->
+	<insert id="insertTimestamp" parameterClass="Timestamp">
+ 		INSERT INTO `common_timestamp`
+            (`timestamp`,
+             `year`,
+             `month`,
+             `day`,
+             `hour`,
+             `minute`,
+             `second`)
+ 		VALUES (#timestamp#,
+			#year#,
+			#month#,
+			#day#,
+			#hour#,
+			#minute#,
+			#second#);
+	</insert>
+	
+	<!--2012-12-26 增加maxValue、minValue-->
+	<sql id="queryWhereClause">
+		<dynamic>
+			<isNotEmpty property="key">
+				and `key_` like CONCAT(#key#,'%')
+			</isNotEmpty>
+			
+			<isNotEmpty property="fullKey"><!--按照key来搜索，不模式匹配 2013-05-02 by liusan.dyf-->
+				and `key_` = #fullKey#
+			</isNotEmpty>
+			
+			<isNotEmpty property="startTimestamp">
+				and `timestamp` >= #startTimestamp#
+			</isNotEmpty>
+			
+			<isNotEmpty property="endTimestamp">
+				and `timestamp` &lt;= #endTimestamp#
+			</isNotEmpty>
+			
+			<isNotEmpty property="maxValue">
+				and `value` &lt;= #maxValue#
+			</isNotEmpty>
+			
+			<isNotEmpty property="minValue">
+				and `value` >= #minValue#
+			</isNotEmpty>
+			
+			<!--  2013-04-28 add lastUpdateTime by sihai.hush -->
+			<isNotEmpty property="lastUpdateTime">
+				and `lastUpdateTime` = #lastUpdateTime#
+			</isNotEmpty>
+			
+			<isNotEmpty property="startLastUpdateTime">
+				and `lastUpdateTime` >= #startLastUpdateTime#
+			</isNotEmpty>
+			
+			<isNotEmpty property="endLastUpdateTime">
+				and `lastUpdateTime` &lt;= #endLastUpdateTime#
+			</isNotEmpty>
+		</dynamic>
+	</sql>
+	
+	<sql id="tableClause">
+		<dynamic>
+			<isNotEmpty property="reservedValue"><!--这里要使用白名单过滤，防止sql注入 2013-05-02 by liusan.dyf-->
+				`$reservedValue$` 
+			</isNotEmpty>
+			
+			<isEmpty property="reservedValue"><!--默认表，为common_counter-->
+				`common_counter` 
+			</isEmpty>
+		</dynamic>
+	</sql>
+
+	<!-- 2012-05-25 by wuchen.lx 
+	2012-10-09 增加startTimestamp、endTimestamp by liusan.dyf
+	2013-05-02 增加了对表的判断，如果reservedValue不为空，就用reservedValue里的表名 by liusan.dyf
+	-->
+	<select id="getPagedList" resultMap="defaultMap" parameterClass="hashmap">
+		SELECT * FROM 
+		<include refid="tableClause" />
+		where 1 = 1
+		<include refid="queryWhereClause" />
+		order by 
+		
+		<!--2013-05-02 by liusan.dyf，这里的排序一律是倒序-->
+		<dynamic>
+			<isEqual property="orderBy" compareValue="id">
+ 				id desc
+ 			</isEqual>
+			
+			<isEqual property="orderBy" compareValue="timestamp">
+ 				`timestamp` desc
+ 			</isEqual>
+			
+			<isEqual property="orderBy" compareValue="lastUpdateTime">
+ 				`lastUpdateTime` desc
+ 			</isEqual>
+			
+			<isEmpty property="orderBy"><!--默认按照id来排序 2013-05-03 by liusan.dyf-->
+ 				id desc
+ 			</isEmpty>
+		</dynamic>
+		limit #skip#,#limit#;
+	</select>
+	
+	<select id="getCount" resultClass="int" parameterClass="hashmap">
+		SELECT count(0) FROM 
+		<include refid="tableClause" />
+		where 1 = 1
+		<include refid="queryWhereClause" />
+		;
+	</select>
+	
+</sqlMap>
