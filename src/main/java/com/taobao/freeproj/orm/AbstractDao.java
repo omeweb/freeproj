@@ -12,12 +12,12 @@ import tools.event.EventArgs;
 import tools.event.EventContainer;
 
 /**
- * ĞèÒªÔÚsqlmapÀïÌá¹©ÈçÏÂkeyµÄÓï¾ä£ºgetPagedList¡¢getCount¡¢getOne¡¢delete¡¢update¡¢insert¡¢
- * getList¡£ÒªÇóibatisÇ¿ÖÆÊ¹ÓÃnamespace£¬²»¹ı¶ÔÍâ½Ó¿Ú£¬Ôò²»ĞèÒªÌá¹©namespace<br />
- * getPagedList_hook_main = query£¬result=count£¬Í¬getList<br />
- * getOne_hook_main = id£¬result=entry<br />
- * ibatis Could not find SQL statement to include with refid 'xxx'£¬½«Õâ¸ö±»ÒıÓÃµÄsqlÆ¬¶Î·Åµ½Ê¹ÓÃËüµÄsqlÇ°Ãæ£¬¾Í¿ÉÒÔÁË<br />
- * xxx·½·¨¶¼²»ĞèÒªÌí¼ÓnamespaceÇ°×º£¬»á×Ô¶¯Ìí¼Ó 2015-4-8 21:42:32 by ÁùÈı
+ * éœ€è¦åœ¨sqlmapé‡Œæä¾›å¦‚ä¸‹keyçš„è¯­å¥ï¼šgetPagedListã€getCountã€getOneã€deleteã€updateã€insertã€
+ * getListã€‚è¦æ±‚ibatiså¼ºåˆ¶ä½¿ç”¨namespaceï¼Œä¸è¿‡å¯¹å¤–æ¥å£ï¼Œåˆ™ä¸éœ€è¦æä¾›namespace<br />
+ * getPagedList_hook_main = queryï¼Œresult=countï¼ŒåŒgetList<br />
+ * getOne_hook_main = idï¼Œresult=entry<br />
+ * ibatis Could not find SQL statement to include with refid 'xxx'ï¼Œå°†è¿™ä¸ªè¢«å¼•ç”¨çš„sqlç‰‡æ®µæ”¾åˆ°ä½¿ç”¨å®ƒçš„sqlå‰é¢ï¼Œå°±å¯ä»¥äº†<br />
+ * xxxæ–¹æ³•éƒ½ä¸éœ€è¦æ·»åŠ namespaceå‰ç¼€ï¼Œä¼šè‡ªåŠ¨æ·»åŠ  2015-4-8 21:42:32 by å…­ä¸‰
  * 
  * @author liusan.dyf
  * @param <T>
@@ -25,27 +25,27 @@ import tools.event.EventContainer;
 public abstract class AbstractDao<T> {
 
 	/**
-	 * ÕâÀï²»ÓÃstatic£¬ÊÇÎªÁËÈÃ²»Í¬µÄdao¿ÉÒÔÓĞ²»Í¬µÄlogger 2012-08-09 by liusan.dyf
+	 * è¿™é‡Œä¸ç”¨staticï¼Œæ˜¯ä¸ºäº†è®©ä¸åŒçš„daoå¯ä»¥æœ‰ä¸åŒçš„logger 2012-08-09 by liusan.dyf
 	 */
 	private Log logger = LogFactory.getLog("orm");
 
-	// 0²¢Ã»ÓĞÆôÓÃ
-	private int maxPageSize = 0;// ÅÂ¿Í»§¶Ë´«Èë¹ı´óµÄpageSize¶øµ¼ÖÂ·şÎñÆ÷ÏìÓ¦Âı 2015-1-19 13:37:02 by ÁùÈı
+	// 0å¹¶æ²¡æœ‰å¯ç”¨
+	private int maxPageSize = 0;// æ€•å®¢æˆ·ç«¯ä¼ å…¥è¿‡å¤§çš„pageSizeè€Œå¯¼è‡´æœåŠ¡å™¨å“åº”æ…¢ 2015-1-19 13:37:02 by å…­ä¸‰
 
-	/*-------------×ÓÀàÒªÓÃµ½µÄ·½·¨------------*/
+	/*-------------å­ç±»è¦ç”¨åˆ°çš„æ–¹æ³•------------*/
 
 	public Session openSession(boolean batch, int tx, boolean autoCommit) {
 		return Configuration.instance().getSession(this.getNamespace(), null, batch, tx, autoCommit);
 	}
 
 	public void onEvent(EventArgs args) {
-		// ×¢Òâ£¬ÕâÀïÒªÑÏ·ÀËÀÑ­»· 2013-07-19 by liusan.dyf
+		// æ³¨æ„ï¼Œè¿™é‡Œè¦ä¸¥é˜²æ­»å¾ªç¯ 2013-07-19 by liusan.dyf
 
 		// String ns = getNamespace().toLowerCase();
 		// if ("operatelog".equals(ns) || "revision".equals(ns) || ns.indexOf("counter") > -1)// 2012-09-19
 		// return;
 
-		// ÕâÀïÊ¹ÓÃ¾²Ì¬·½·¨»ñÈ¡£¬ÎªÁË·ÀÖ¹ÔÚÃ¿¸ö×ÓÀàÀï¶¼set£¬¼õÉÙ·±Ëö 2013-12-16 by liusan.dyf
+		// è¿™é‡Œä½¿ç”¨é™æ€æ–¹æ³•è·å–ï¼Œä¸ºäº†é˜²æ­¢åœ¨æ¯ä¸ªå­ç±»é‡Œéƒ½setï¼Œå‡å°‘ç¹ç 2013-12-16 by liusan.dyf
 		EventContainer h = Configuration.instance().getEventContainer();
 		if (h != null)
 			h.onEvent(this, args);
@@ -59,12 +59,12 @@ public abstract class AbstractDao<T> {
 		this.logger = logger;
 	}
 
-	/*-------------×ÓÀàÒªÓÃµ½µÄ·½·¨2 2012-08-10------------*/
+	/*-------------å­ç±»è¦ç”¨åˆ°çš„æ–¹æ³•2 2012-08-10------------*/
 
 	public abstract String getNamespace();
 
 	/**
-	 * 2012-08-10 by liusan.dyf£¬±ØĞëÔÚsqlmapÀïÅäÖÃgetPagedListºÍgetCount·½·¨
+	 * 2012-08-10 by liusan.dyfï¼Œå¿…é¡»åœ¨sqlmapé‡Œé…ç½®getPagedListå’ŒgetCountæ–¹æ³•
 	 * 
 	 * @param query
 	 * @param pageIndex
@@ -73,16 +73,16 @@ public abstract class AbstractDao<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public PagedList<T> getPagedList(Map<String, Object> query, int pageIndex, int pageSize) {
-		// ¼ì²é²ÎÊı 2013-03-06 by liusan.dyf
+		// æ£€æŸ¥å‚æ•° 2013-03-06 by liusan.dyf
 		if (pageIndex < 0)
 			pageIndex = 0;
 		if (pageSize <= 0)
 			pageSize = 10;
 
-		// 2015-1-19 13:40:04 by ÁùÈı
+		// 2015-1-19 13:40:04 by å…­ä¸‰
 		if (maxPageSize != 0) {
 			if (pageSize > maxPageSize) {
-				throw new IllegalArgumentException("²ÎÊı´íÎó£¬pageSize¹ı´ó£¬µ±Ç°Îª" + pageSize + "£¬²»ÄÜ³¬¹ı" + maxPageSize);
+				throw new IllegalArgumentException("å‚æ•°é”™è¯¯ï¼ŒpageSizeè¿‡å¤§ï¼Œå½“å‰ä¸º" + pageSize + "ï¼Œä¸èƒ½è¶…è¿‡" + maxPageSize);
 			}
 		}
 
@@ -96,7 +96,7 @@ public abstract class AbstractDao<T> {
 
 		String statementId = "getPagedList";
 
-		// hookÊÂ¼ş
+		// hookäº‹ä»¶
 		String bizKey = getBizKey();
 		EventArgs evtArgs = EventArgs.create(query).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
@@ -108,7 +108,7 @@ public abstract class AbstractDao<T> {
 			PagedList<T> rtn = new PagedList<T>();
 			rtn.setList(list);
 
-			// ÉèÖÃcountĞÅÏ¢
+			// è®¾ç½®countä¿¡æ¯
 			if (!query.containsKey("noCount"))// 2013-03-06 by liusan.dyf
 				if (pageIndex == 0) {
 					int c = Convert.toInt(session.selectOne(getNamespace() + ".getCount", query), 0);
@@ -138,7 +138,7 @@ public abstract class AbstractDao<T> {
 	public Object getObject(String statementId, Object query) {
 		Object r = null;
 
-		// hookÊÂ¼ş
+		// hookäº‹ä»¶
 		String bizKey = getBizKey();
 		EventArgs evtArgs = EventArgs.create(query).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
@@ -155,7 +155,7 @@ public abstract class AbstractDao<T> {
 	}
 
 	/**
-	 * 2012-08-23 by liusan.dyf£¬ÓÃµ½sqlmapÀïµÄgetCount
+	 * 2012-08-23 by liusan.dyfï¼Œç”¨åˆ°sqlmapé‡Œçš„getCount
 	 * 
 	 * @param params
 	 * @return
@@ -174,7 +174,7 @@ public abstract class AbstractDao<T> {
 		if (query == null)
 			return null;
 
-		// hookÊÂ¼ş
+		// hookäº‹ä»¶
 		String bizKey = getBizKey();
 		EventArgs evtArgs = EventArgs.create(query).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
@@ -196,7 +196,7 @@ public abstract class AbstractDao<T> {
 	}
 
 	/**
-	 * ĞèÒªÓĞdeleteµÄsqlmap
+	 * éœ€è¦æœ‰deleteçš„sqlmap
 	 */
 	public int delete(Object param) {
 		return delete("delete", param);
@@ -255,7 +255,7 @@ public abstract class AbstractDao<T> {
 	}
 
 	/**
-	 * KeyValueMapper -¡· keyvalue
+	 * KeyValueMapper -ã€‹ keyvalue
 	 * 
 	 * @return
 	 */
@@ -306,9 +306,9 @@ public abstract class AbstractDao<T> {
 
 		Session session = openSession(false, 0, false);
 		try {
-			// 2012-08-13£¬insert²»Ò»¶¨»á·µ»Øint
+			// 2012-08-13ï¼Œinsertä¸ä¸€å®šä¼šè¿”å›int
 			rtn = session.insert(getNamespace() + "." + statementId, entry);
-			// rtn = tools.Convert.toInt(obj, 0);// 2013-01-14 ¿ÉÄÜ·µ»Ølong£¬¼´Êı¾İ¿âµÄbigint£¬ÕâÀïÒÀÈ»×ª»»Îªint
+			// rtn = tools.Convert.toInt(obj, 0);// 2013-01-14 å¯èƒ½è¿”å›longï¼Œå³æ•°æ®åº“çš„bigintï¼Œè¿™é‡Œä¾ç„¶è½¬æ¢ä¸ºint
 			session.commit();
 		} finally {
 			session.close();
@@ -321,7 +321,7 @@ public abstract class AbstractDao<T> {
 	}
 
 	/**
-	 * 2012-08-10 by liusan.dyf£¬±ØĞëÒªÔÚsqlmapÀïÅäÖÃinsert·½·¨
+	 * 2012-08-10 by liusan.dyfï¼Œå¿…é¡»è¦åœ¨sqlmapé‡Œé…ç½®insertæ–¹æ³•
 	 * 
 	 * @param list
 	 * @return
@@ -332,7 +332,7 @@ public abstract class AbstractDao<T> {
 	}
 
 	/**
-	 * 2012-08-22 by liusan.dyf Ä¬ÈÏÊ¹ÓÃÊÂÎñ
+	 * 2012-08-22 by liusan.dyf é»˜è®¤ä½¿ç”¨äº‹åŠ¡
 	 * 
 	 * @param statementId
 	 * @param list
@@ -343,7 +343,7 @@ public abstract class AbstractDao<T> {
 	}
 
 	/**
-	 * Ê¹ÓÃÁËÖØÔØ£¨jsonrpcÎŞ·¨Ê¹ÓÃ£©£¬¿ÉÒÔÑ¡ÔñÅúÁ¿Ê±²»Ê¹ÓÃÊÂÎñ 2013-02-25 by liusan.dyf
+	 * ä½¿ç”¨äº†é‡è½½ï¼ˆjsonrpcæ— æ³•ä½¿ç”¨ï¼‰ï¼Œå¯ä»¥é€‰æ‹©æ‰¹é‡æ—¶ä¸ä½¿ç”¨äº‹åŠ¡ 2013-02-25 by liusan.dyf
 	 * 
 	 * @param statementId
 	 * @param list

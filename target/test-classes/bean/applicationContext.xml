@@ -5,7 +5,7 @@
 	<!--2012-03-06 by liusan.dyf SpringBeanUtil-->
 	<bean class="tools.SpringContext" />
 	
-	<!-- velocity view begin Ê¹ÓÃVELOCITY --> 
+	<!-- velocity view begin ä½¿ç”¨VELOCITY --> 
     <!--
     <bean id="dataSource_"
 		  class="org.springframework.jdbc.datasource.DriverManagerDataSource"
@@ -16,15 +16,15 @@
 	</bean>
 	-->
 	
-	<!-- Êý¾ÝÔ´ÅäÖÃ,ÔÚ²âÊÔ»·¾³Ê¹ÓÃµ¥Á¬½Ó -->  
+	<!-- æ•°æ®æºé…ç½®,åœ¨æµ‹è¯•çŽ¯å¢ƒä½¿ç”¨å•è¿žæŽ¥ -->  
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
-        <property name="url" value="jdbc:mysql://***:3306/mtee?useUnicode=true&amp;characterEncoding=GBK&amp;allowMultiQueries=true" />  
+        <property name="url" value="jdbc:mysql://***:3306/mtee?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true" />  
         <property name="username" value="*" />  
         <property name="password" value="*" />  
     </bean> 
 	
-	<!--sqlMapClient£¬¿ÉÒÔ¹«ÓÃ-->
+	<!--sqlMapClientï¼Œå¯ä»¥å…¬ç”¨-->
     <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
       <property name="configLocation">
          <value>classpath:SqlMapConfig.xml</value>
@@ -41,7 +41,7 @@
 		</property>
 	</bean>
 
-	<!-- ÅäÖÃ 2015-4-8 17:08:46 by ÁùÈý -->
+	<!-- é…ç½® 2015-4-8 17:08:46 by å…­ä¸‰ -->
 	<bean class="com.taobao.freeproj.orm.Configuration" init-method="init">
 		<!-- eventContainer -->
 		<property name="eventContainer">
@@ -69,8 +69,8 @@
 		</property>
 	</bean>
     
-    <!--kvµÄdao£¬keyÓÃÀ´·Ö±í
-   2012-04-12ÐÞ¸ÄÎªKeyValueDaoImplWrapper by liusan.dyf
+    <!--kvçš„daoï¼Œkeyç”¨æ¥åˆ†è¡¨
+   2012-04-12ä¿®æ”¹ä¸ºKeyValueDaoImplWrapper by liusan.dyf
    -->
    <bean id="keyValueDao" class="com.taobao.freeproj.dao.KeyValueDaoImpl">
      <property name="key">

@@ -16,28 +16,28 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 	private int leveledLength = DEFAULT_LEVELED_LENGTH;
 
 	/**
-	 * Ö§³Ö·Ö±í 2012-08-02 by liusan.dyf
+	 * æ”¯æŒåˆ†è¡¨ 2012-08-02 by liusan.dyf
 	 */
 	private String key = "common_catalog";
 
 	@Override
 	public long add(Catalog entry) {
-		// ¼ì²é²ÎÊı 2012-02-15 by liusan.dyf
+		// æ£€æŸ¥å‚æ•° 2012-02-15 by liusan.dyf
 		if (entry == null)
-			throw new IllegalArgumentException("entry²»ÄÜÎªnull");
+			throw new IllegalArgumentException("entryä¸èƒ½ä¸ºnull");
 
 		// title
 		String title = entry.getTitle();
 
 		if (tools.StringUtil.isNullOrEmpty(title))
-			throw new IllegalArgumentException("entry.title²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entry.titleä¸èƒ½ä¸ºç©º");
 
-		// title·ÀÖ¹HTML´úÂë
+		// titleé˜²æ­¢HTMLä»£ç 
 		entry.setTitle(tools.StringUtil.encodeHTML(title));
 
 		entry.setReservedValue(getKey());// 2012-08-02
 
-		// 2012-02-29È¡Ïû£¬commentÀï´æ´¢ÓĞjsonÅäÖÃ
+		// 2012-02-29å–æ¶ˆï¼Œcommenté‡Œå­˜å‚¨æœ‰jsoné…ç½®
 		// entry.setComment(tools.StringUtil.encodeHTML(entry.getComment()));//
 		// 2012-02-17
 
@@ -45,43 +45,43 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 		int len = code.length();
 		String parentCode = code.substring(0, len - getLeveledLength());
 
-		// codeÎªnull£¬µ±×÷Ò»¼¶Àà±ğ
+		// codeä¸ºnullï¼Œå½“ä½œä¸€çº§ç±»åˆ«
 		if (tools.StringUtil.isNullOrEmpty(code)) {
-			// // Éú³Écode
+			// // ç”Ÿæˆcode
 			// while (true) {
-			// code = tools.StringUtil.getRndChars(LEN, DIGITS);// Ä¿Ç°ÊÇ3Î»
+			// code = tools.StringUtil.getRndChars(LEN, DIGITS);// ç›®å‰æ˜¯3ä½
 			// if (null == getOneByCode(code))
 			// break;
 			// }
 
-			throw new IllegalArgumentException("entry.code²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entry.codeä¸èƒ½ä¸ºç©º");
 		} else {
 			if ((len % getLeveledLength()) != 0)
-				throw new IllegalArgumentException("entry.codeµÄ³¤¶È±ØĞëÊÇ" + getLeveledLength() + "µÄ±¶Êı");
+				throw new IllegalArgumentException("entry.codeçš„é•¿åº¦å¿…é¡»æ˜¯" + getLeveledLength() + "çš„å€æ•°");
 
-			// ¿´¸¸ÏµÄ¿Â¼ÊÇ·ñ´æÔÚ
-			if (len > getLeveledLength()) { // 2012-02-16£¬µ±len>LENÊ±²Å×ö
+			// çœ‹çˆ¶ç³»ç›®å½•æ˜¯å¦å­˜åœ¨
+			if (len > getLeveledLength()) { // 2012-02-16ï¼Œå½“len>LENæ—¶æ‰åš
 				if (null == getOne(parentCode))
-					throw new IllegalArgumentException("¸¸ÏµÄ¿Â¼²¢²»´æÔÚ£¬±àºÅ£º" + parentCode);
+					throw new IllegalArgumentException("çˆ¶ç³»ç›®å½•å¹¶ä¸å­˜åœ¨ï¼Œç¼–å·ï¼š" + parentCode);
 			}
 		}
 
-		// ÖØĞÂÉèÖÃ»Øcode
+		// é‡æ–°è®¾ç½®å›code
 		entry.setCode(code);
 		entry.setParentPath(parentCode);// 2012-06-11
 		// logger.info("parentCode:" + entry.getParentPath());
 		entry.setLevel(entry.getCode().length() / getLeveledLength());
 
 		long id = 0;
-		Catalog c = getOne(entry.getCode());// ¼ì²écodeÊÇ·ñÓĞÖØ¸´
+		Catalog c = getOne(entry.getCode());// æ£€æŸ¥codeæ˜¯å¦æœ‰é‡å¤
 		if (c != null)
-			id = -1;// ÖØ¸´
-		else {// ²»ÖØ¸´ ¿ÉÒÔ²åÈë
+			id = -1;// é‡å¤
+		else {// ä¸é‡å¤ å¯ä»¥æ’å…¥
 
-			// ¼ì²éÍ¬¼¶Ä¿Â¼ÊÇ·ñÓĞÍ¬ÃûµÄ 2012-03-08
+			// æ£€æŸ¥åŒçº§ç›®å½•æ˜¯å¦æœ‰åŒåçš„ 2012-03-08
 			int i = checkUniquenessOfTheSiblingTitle(parentCode, entry.getTitle(), null);
 			if (i > 0)
-				throw new IllegalArgumentException("¸Ã¼¶±ğÏÂ£¬ÒÑ¾­´æÔÚÕâ¸öÃû³ÆÁË£¬Çë»»Ò»¸ö");
+				throw new IllegalArgumentException("è¯¥çº§åˆ«ä¸‹ï¼Œå·²ç»å­˜åœ¨è¿™ä¸ªåç§°äº†ï¼Œè¯·æ¢ä¸€ä¸ª");
 
 			// onEvent(evtArgs);
 			//
@@ -102,32 +102,32 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 	}
 
 	/**
-	 * 2012-07-05 by liusan.dyf ÀàÄ¿ÒÆ¶¯
+	 * 2012-07-05 by liusan.dyf ç±»ç›®ç§»åŠ¨
 	 * 
 	 * @param fromCode
 	 * @param toCode
 	 * @return
 	 */
 	public int move(String fromCode, String toCode) {
-		if (tools.StringUtil.isNullOrEmpty(fromCode))// ²»±ØÅĞ¶ÏtoCode£¬Ä¿±ê¿ÉÄÜÊÇ¶¥¼¶Ä¿Â¼
+		if (tools.StringUtil.isNullOrEmpty(fromCode))// ä¸å¿…åˆ¤æ–­toCodeï¼Œç›®æ ‡å¯èƒ½æ˜¯é¡¶çº§ç›®å½•
 			return 0;
 
-		// ÅĞ¶ÏÄ¿±êÊÇ·ñÊÇfromCodeµÄ×Ó¼¯
+		// åˆ¤æ–­ç›®æ ‡æ˜¯å¦æ˜¯fromCodeçš„å­é›†
 		if (fromCode.startsWith(toCode))
-			throw new IllegalArgumentException("Ä¿±êÀà±ğ²»ÄÜÊÇÒªÒÆ¶¯µÄÀà±ğµÄ×ÓÀà");
+			throw new IllegalArgumentException("ç›®æ ‡ç±»åˆ«ä¸èƒ½æ˜¯è¦ç§»åŠ¨çš„ç±»åˆ«çš„å­ç±»");
 
-		// ÅĞ¶ÏÁ½ÖÖÊÇ·ñ´æÔÚ
-		Catalog from = getOne(fromCode);// fromCode²»ÄÜÎª¿Õ£¬·ñÔò²»ÖªµÀÊ²Ã´ÀàÒª±»ÒÆ¶¯
+		// åˆ¤æ–­ä¸¤ç§æ˜¯å¦å­˜åœ¨
+		Catalog from = getOne(fromCode);// fromCodeä¸èƒ½ä¸ºç©ºï¼Œå¦åˆ™ä¸çŸ¥é“ä»€ä¹ˆç±»è¦è¢«ç§»åŠ¨
 		Catalog to = null;
-		if (!tools.StringUtil.isNullOrEmpty(toCode)) {// Ö»ÓĞtoCode²»Îª¿ÕÊ±²Å
+		if (!tools.StringUtil.isNullOrEmpty(toCode)) {// åªæœ‰toCodeä¸ä¸ºç©ºæ—¶æ‰
 			to = getOne(toCode);
 
 			if (to == null)
-				throw new IllegalArgumentException("Ä¿±êÀà±ğ²»´æÔÚ");
+				throw new IllegalArgumentException("ç›®æ ‡ç±»åˆ«ä¸å­˜åœ¨");
 		}
 
 		if (from == null)
-			throw new IllegalArgumentException("ÒªÒÆ¶¯µÄÀà±ğ²»´æÔÚ");
+			throw new IllegalArgumentException("è¦ç§»åŠ¨çš„ç±»åˆ«ä¸å­˜åœ¨");
 
 		//
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -139,15 +139,15 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 		//
 		int rtn = 0;
 
-		// ·¢Éä³öµ¥¶ÀµÄÊÂ¼ş 2015-4-8 17:40:01 by ÁùÈı
+		// å‘å°„å‡ºå•ç‹¬çš„äº‹ä»¶ 2015-4-8 17:40:01 by å…­ä¸‰
 		Catalog entry = new Catalog();
 		entry.setCode(fromCode);
 
-		// ÊÂ¼ş
+		// äº‹ä»¶
 		tools.event.EventArgs evtArgs = tools.event.EventArgs.create(entry).setType("catalog.before-move");
 		onEvent(evtArgs);
 
-		// ¸üĞÂ
+		// æ›´æ–°
 		rtn = updateEx("move", data);
 
 		onEvent(evtArgs.setType("catalog.after-move").set("result", rtn));
@@ -156,22 +156,22 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 	}
 
 	/**
-	 * 2012-03-08 ¼ì²éÄ³¸¸ÏµÀàÄ¿ÏÂÊÇ·ñÓĞÍ¬±êÌâµÄÀàÄ¿
+	 * 2012-03-08 æ£€æŸ¥æŸçˆ¶ç³»ç±»ç›®ä¸‹æ˜¯å¦æœ‰åŒæ ‡é¢˜çš„ç±»ç›®
 	 * 
-	 * @param parentCode ¿ÉÒÔÎª¿Õ£¬Îª¿Õ±íÊ¾Ò»¼¶ÀàÄ¿
-	 * @param title ÀàÄ¿±êÌâ£¬±ØĞë
-	 * @param exCode ¿ÉÒÔÅÅ³ıµÄÀàÄ¿±àºÅ
+	 * @param parentCode å¯ä»¥ä¸ºç©ºï¼Œä¸ºç©ºè¡¨ç¤ºä¸€çº§ç±»ç›®
+	 * @param title ç±»ç›®æ ‡é¢˜ï¼Œå¿…é¡»
+	 * @param exCode å¯ä»¥æ’é™¤çš„ç±»ç›®ç¼–å·
 	 * @return
 	 */
 	public int checkUniquenessOfTheSiblingTitle(String parentCode, String title, String exCode) {
 		int rtn = 0;
 
 		Map<String, Object> data = new HashMap<String, Object>();
-		if (!tools.StringUtil.isNullOrEmpty(parentCode)) {// ÆÕÍ¨ÀàÄ¿
+		if (!tools.StringUtil.isNullOrEmpty(parentCode)) {// æ™®é€šç±»ç›®
 			data.put("parentCode", parentCode);
 			data.put("level", (parentCode.length() / getLeveledLength()) + 1);
 		} else
-			data.put("level", 1);// Ò»¼¶ÀàÄ¿
+			data.put("level", 1);// ä¸€çº§ç±»ç›®
 
 		data.put("title", title);
 
@@ -198,7 +198,7 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 	}
 
 	/**
-	 * °üº¬code½Úµã±¾Éí 2012-05-21
+	 * åŒ…å«codeèŠ‚ç‚¹æœ¬èº« 2012-05-21
 	 */
 	@Override
 	public List<Catalog> getAllEx(String code) {
@@ -213,7 +213,7 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 	}
 
 	/**
-	 * 2012-07-31 by liusan.dyf whereÀï¿ÉÒÔ°üº¬code£¨¸¸ÏµÀàÄ¿±àºÅ£©¡¢orderby£¬ÆäÖĞorderbyµÄÖµÖ»ÄÜÎªupdateTime £¬´ËÊ±°´ÕÕ¸üĞÂÊ±¼äÅÅĞò£»·ñÔò°´ÕÕÀàÄ¿¼¶±ğÅÅĞò¡£
+	 * 2012-07-31 by liusan.dyf whereé‡Œå¯ä»¥åŒ…å«codeï¼ˆçˆ¶ç³»ç±»ç›®ç¼–å·ï¼‰ã€orderbyï¼Œå…¶ä¸­orderbyçš„å€¼åªèƒ½ä¸ºupdateTime ï¼Œæ­¤æ—¶æŒ‰ç…§æ›´æ–°æ—¶é—´æ’åºï¼›å¦åˆ™æŒ‰ç…§ç±»ç›®çº§åˆ«æ’åºã€‚
 	 * 
 	 * @param where
 	 * @return
@@ -224,7 +224,7 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 
 		String statement = "getList";
 
-		// ibatis dynamicÓï¾ä£¬Èç¹û´«null£¬ÔòÕÒ²»µ½ÊôĞÔ 2012-04-11
+		// ibatis dynamicè¯­å¥ï¼Œå¦‚æœä¼ nullï¼Œåˆ™æ‰¾ä¸åˆ°å±æ€§ 2012-04-11
 		if (where == null)
 			where = new HashMap<String, Object>();
 		else {
@@ -232,7 +232,7 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 				statement = "getList_order_by_update_time";
 		}
 
-		// Ö´ĞĞ
+		// æ‰§è¡Œ
 		where.put("reservedValue", getKey());// 2012-08-02
 		list = (List<Catalog>) getListEx(statement, where);
 
@@ -271,36 +271,36 @@ public class CatalogDaoImpl extends AbstractDao<Catalog> implements CatalogDao {
 
 	@Override
 	public int update(Catalog entry) {
-		// ¼ì²é²ÎÊı 2012-02-15 by liusan.dyf
+		// æ£€æŸ¥å‚æ•° 2012-02-15 by liusan.dyf
 		if (entry == null)
-			throw new IllegalArgumentException("entry²»ÄÜÎªnull");
+			throw new IllegalArgumentException("entryä¸èƒ½ä¸ºnull");
 
 		// title
 		String title = entry.getTitle();
 
 		if (tools.StringUtil.isNullOrEmpty(title))
-			throw new IllegalArgumentException("entry.title²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entry.titleä¸èƒ½ä¸ºç©º");
 
-		// title·ÀÖ¹HTML´úÂë
+		// titleé˜²æ­¢HTMLä»£ç 
 		entry.setTitle(tools.StringUtil.encodeHTML(title));
 
 		entry.setReservedValue(getKey());// 2012-08-02
 
-		// 2012-03-12È¡Ïû£¬ĞŞ¸ÄÓ¦ÓÃÅäÖÃµÄµØ·½£¬commentÊÇjson£¬²»ÄÜencode
+		// 2012-03-12å–æ¶ˆï¼Œä¿®æ”¹åº”ç”¨é…ç½®çš„åœ°æ–¹ï¼Œcommentæ˜¯jsonï¼Œä¸èƒ½encode
 		// entry.setComment(tools.StringUtil.encodeHTML(entry.getComment()));//
 		// 2012-02-17
 
 		// code
 		String code = entry.getCode();
 		if (tools.StringUtil.isNullOrEmpty(code))
-			throw new IllegalArgumentException("entry.code²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entry.codeä¸èƒ½ä¸ºç©º");
 
 		String parentCode = code.substring(0, code.length() - getLeveledLength());
 
-		// ¼ì²éÍ¬¼¶Ä¿Â¼ÊÇ·ñÓĞÍ¬ÃûµÄ 2012-03-08
+		// æ£€æŸ¥åŒçº§ç›®å½•æ˜¯å¦æœ‰åŒåçš„ 2012-03-08
 		int i = checkUniquenessOfTheSiblingTitle(parentCode, entry.getTitle(), code);
 		if (i > 0)
-			throw new IllegalArgumentException("Í¬¼¶ÀàÄ¿Ãû³ÆÖØ¸´ÁË");
+			throw new IllegalArgumentException("åŒçº§ç±»ç›®åç§°é‡å¤äº†");
 
 		return super.update(entry);
 	}

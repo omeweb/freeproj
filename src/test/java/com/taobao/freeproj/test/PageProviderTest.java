@@ -27,13 +27,13 @@ public class PageProviderTest {
 		System.out.println(provider.get("/include_nest.html"));
 		System.out.println(provider.get("/include_null.html"));
 
-		// ÒÀÀµ·¢ÉúÁË±ä»¯
+		// ä¾èµ–å‘ç”Ÿäº†å˜åŒ–
 		provider.reload("/part1.html");
 
 		System.out.println(provider.get("/include.html"));
 		System.out.println(provider.get("/include_nest.html"));
 
-		// ÒÀÀµ·¢ÉúÁË±ä»¯
+		// ä¾èµ–å‘ç”Ÿäº†å˜åŒ–
 		provider.remove("/part1.html");
 
 		System.out.println(provider.get("/include.html"));
@@ -77,7 +77,7 @@ class KV implements KeyValueDao {
 
 	@Override
 	public KeyValue getOne(String typeCode, String key) {
-		// ÕâÀï¶Ôvalue×öÒ»Ğ©ĞŞ¸Ä
+		// è¿™é‡Œå¯¹valueåšä¸€äº›ä¿®æ”¹
 		for (KeyValue item : list) {
 			if (item.getKey().equals(key)) {
 				item.setValue(item.getValue() + "--changed.");
@@ -107,7 +107,7 @@ class KV implements KeyValueDao {
 		PagedList<KeyValue> pl = new PagedList<KeyValue>();
 		pl.setCount(0);
 
-		// ¹¹Ôìlist
+		// æ„é€ list
 		String json = Resource.getResourceAsString(this.getClass().getClassLoader(), "kv.txt", "gbk");
 
 		list = tools.Json.toObject(json, new com.fasterxml.jackson.core.type.TypeReference<List<KeyValue>>() {

@@ -3,7 +3,7 @@ package com.taobao.freeproj.domain;
 import java.util.Date;
 
 /**
- * ²Ù×÷ÀúÊ·ĞÅÏ¢
+ * æ“ä½œå†å²ä¿¡æ¯
  * 
  * @author <a href="mailto:wuchen.lx@taobao.com">wuchen.lx</a>
  * @version 1.0
@@ -22,12 +22,12 @@ public class OperateLog {
 	private String title;
 
 	/**
-	 * 2012-05-24 by liusan.dyf£¬ÕâÀï¼ÇÂ¼ĞŞ¸ÄµÄ¶ÔÏóµÄÎ¨Ò»id£¬±ãÓÚ¼ìË÷£¬ÓÃStringÀàĞÍ£¬Áé»îĞÔ¸üºÃ
+	 * 2012-05-24 by liusan.dyfï¼Œè¿™é‡Œè®°å½•ä¿®æ”¹çš„å¯¹è±¡çš„å”¯ä¸€idï¼Œä¾¿äºæ£€ç´¢ï¼Œç”¨Stringç±»å‹ï¼Œçµæ´»æ€§æ›´å¥½
 	 */
 	private String targetKey;
 
 	/**
-	 * Ä¿±ê°æ±¾ºÅ 2014-07-11 by liusan.dyf
+	 * ç›®æ ‡ç‰ˆæœ¬å· 2014-07-11 by liusan.dyf
 	 */
 	private int revision;
 

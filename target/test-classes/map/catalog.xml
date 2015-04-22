@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="GB2312"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap
     PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
-	<!-- ÏÄÀ× -->
+	<!-- å¤é›· -->
 <sqlMap namespace="catalog">
 	<typeAlias alias="Catalog" type="com.taobao.freeproj.domain.Catalog" />
 
 	<!--
-	2012-07-31 Ôö¼ÓlastOperator¡¢creator by liusan.dyf
-	2012-08-31 Ôö¼ÓreservedString by liusan.dyf
+	2012-07-31 å¢žåŠ lastOperatorã€creator by liusan.dyf
+	2012-08-31 å¢žåŠ reservedString by liusan.dyf
 	-->
 	<insert id="insert" parameterClass="Catalog">
 		INSERT INTO $reservedField$
@@ -28,7 +28,7 @@
 	</delete>
 
 	<!--2012-04-10
-	2012-07-31Ôö¼ÓlastOperator by liusan.dyf
+	2012-07-31å¢žåŠ lastOperator by liusan.dyf
 	-->
 	<update id="update" parameterClass="Catalog">
 		update `$reservedField$`
@@ -62,10 +62,10 @@
 	</update>
 	
 	<!--2012-07-11 by liusan.dyf
-	µ±°Ñfrom½ÚµãÒÆ¶¯µ½to½Úµã£¬Ê×ÏÈ£¬fromµÄcodeÒªÏÈ¸½¼ÓtoµÄcode£¬È»ºóÔÙ¼ÓÉÏ×Ô¼ºµÄ£¨from£©ºó#leveledLength#Î»¡£
-	fromµÄparentpath£¬ÆäÊµ¾ÍÊÇÉáÆúµô¸üÐÂÁËµÄcodeµÄ×îºóleveledLengthÎ»
+	å½“æŠŠfromèŠ‚ç‚¹ç§»åŠ¨åˆ°toèŠ‚ç‚¹ï¼Œé¦–å…ˆï¼Œfromçš„codeè¦å…ˆé™„åŠ toçš„codeï¼Œç„¶åŽå†åŠ ä¸Šè‡ªå·±çš„ï¼ˆfromï¼‰åŽ#leveledLength#ä½ã€‚
+	fromçš„parentpathï¼Œå…¶å®žå°±æ˜¯èˆå¼ƒæŽ‰æ›´æ–°äº†çš„codeçš„æœ€åŽleveledLengthä½
 	
-	reservedStringÏÈ²»¶¯
+	reservedStringå…ˆä¸åŠ¨
 	-->
 	<update id="move"  parameterClass="hashmap">
 		UPDATE `$reservedField$` SET `code` = CONCAT(#to#, SUBSTRING(`code`,LENGTH(#from#)-#leveledLength# + 1)) ,
@@ -77,7 +77,7 @@
 		SELECT * FROM `$reservedField$` where code = #code# ;
 	</select>
 	
-	<!--2012-03-08 ÅÐ¶ÏÍ¬¼¶Ä¿Â¼ÊÇ·ñÓÐÖØ¸´µÄ-->
+	<!--2012-03-08 åˆ¤æ–­åŒçº§ç›®å½•æ˜¯å¦æœ‰é‡å¤çš„-->
 	<select id="checkUniquenessOfTheSiblingTitle" resultClass="int" parameterClass="hashmap">
 		SELECT count(0) FROM `$reservedField$` where
 		
@@ -107,13 +107,13 @@
 		</dynamic>
     </sql>
 
-	<!--2012-06-11ÐÞ¸ÄÁËÅÅÐò¹æÔò-->
+	<!--2012-06-11ä¿®æ”¹äº†æŽ’åºè§„åˆ™-->
 	<select id="getList" resultClass="Catalog" parameterClass="hashmap">
 		<include refid="sql_getList"/>
 		order by `parentPath`,`sortNumber`;
 	</select>
 	
-	<!--2012-07-31 by liusan.dyf£¬°´ÕÕ×îºó¸üÐÂÊ±¼äÅÅÐò-->
+	<!--2012-07-31 by liusan.dyfï¼ŒæŒ‰ç…§æœ€åŽæ›´æ–°æ—¶é—´æŽ’åº-->
 	<select id="getList_order_by_update_time" resultClass="Catalog" parameterClass="hashmap">
 		<include refid="sql_getList"/>
 		order by `lastUpdateTime`;

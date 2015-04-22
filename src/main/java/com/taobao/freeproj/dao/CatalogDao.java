@@ -5,7 +5,7 @@ import java.util.List;
 import com.taobao.freeproj.domain.Catalog;
 
 /**
- * ��Ŀdao
+ * ÀàÄ¿dao
  * 
  * @author xialei.cg
  */

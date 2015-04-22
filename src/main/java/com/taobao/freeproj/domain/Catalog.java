@@ -3,8 +3,8 @@ package com.taobao.freeproj.domain;
 import java.util.Date;
 
 /**
- * ÀàÄ¿bean<br />
- * 2013-03-05 by liusan.dyf Ôö¼ÓauthorizationCode£¬¿ÉÓÃÀ´´æ´¢ÊÚÈ¨ÂëµÈ
+ * ç±»ç›®bean<br />
+ * 2013-03-05 by liusan.dyf å¢åŠ authorizationCodeï¼Œå¯ç”¨æ¥å­˜å‚¨æˆæƒç ç­‰
  * 
  * @author xialei.cg
  */
@@ -21,12 +21,12 @@ public class Catalog {
 	private int status;
 
 	/**
-	 * ±¸×¢ĞÅÏ¢ 2012-02-17 by liusan.dyf
+	 * å¤‡æ³¨ä¿¡æ¯ 2012-02-17 by liusan.dyf
 	 */
 	private String comment;
 
 	// /**
-	// * ³éÏóµÄuserId£¬±íÊ¾Ä¿Â¼¹éË­ËùÓĞ 2012-02-21
+	// * æŠ½è±¡çš„userIdï¼Œè¡¨ç¤ºç›®å½•å½’è°æ‰€æœ‰ 2012-02-21
 	// */
 	// private long userId;
 
@@ -37,7 +37,7 @@ public class Catalog {
 	private String lastOperator;
 
 	/**
-	 * ÒÔ´ËÖ§³Ö·Ö±í 2012-08-02
+	 * ä»¥æ­¤æ”¯æŒåˆ†è¡¨ 2012-08-02
 	 */
 	private String reservedValue;
 

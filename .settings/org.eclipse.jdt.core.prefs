@@ -1,9 +1,9 @@
-#Mon Apr 20 10:30:34 CST 2015
+#Wed Apr 22 11:10:54 CST 2015
 org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.6
 eclipse.preferences.version=1
-encoding/src/main/java=GBK
+encoding/src/main/java=UTF-8
 org.eclipse.jdt.core.compiler.source=1.6
-encoding/src/test/resources=GBK
-encoding/src/main/resources=GBK
-encoding/src/test/java=GBK
+encoding/src/test/resources=UTF-8
+encoding/src/main/resources=UTF-8
+encoding/src/test/java=UTF-8
 org.eclipse.jdt.core.compiler.compliance=1.6

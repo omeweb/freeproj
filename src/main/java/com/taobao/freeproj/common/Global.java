@@ -1,7 +1,7 @@
 package com.taobao.freeproj.common;
 
 /**
- * 使用静态方法，方便使用，spring bean，注意init-method = init
+ * 浣跨敤闈欐�佹柟娉曪紝鏂逛究浣跨敤锛宻pring bean锛屾敞鎰廼nit-method = init
  * 
  * @author liusan.dyf
  */

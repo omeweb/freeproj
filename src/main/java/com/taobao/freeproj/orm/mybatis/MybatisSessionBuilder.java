@@ -14,11 +14,11 @@ public class MybatisSessionBuilder implements SessionBuilder {
 	@Override
 	public Session build(boolean batch, int tx, boolean autoCommit) {
 		if (factory == null)
-			throw new IllegalArgumentException("SqlSessionFactory²»ÄÜÎªnull");
+			throw new IllegalArgumentException("SqlSessionFactoryä¸èƒ½ä¸ºnull");
 
 		ExecutorType executorType = batch ? ExecutorType.BATCH : ExecutorType.SIMPLE;
 
-		// TODO ÕâÀïÔİÊ±²»ÉèÖÃÊÂÎñ¼¶±ğ
+		// TODO è¿™é‡Œæš‚æ—¶ä¸è®¾ç½®äº‹åŠ¡çº§åˆ«
 		SqlSession raw = factory.openSession(executorType, autoCommit);
 		return new MybatisSession(raw, batch, tx, autoCommit);
 	}

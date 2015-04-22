@@ -1,3 +1,3 @@
-spring 4.0+版本移除了SqlMapClientFactoryBean类，这里附带上，防止用法出错
+spring 4.0+鐗堟湰绉婚櫎浜哠qlMapClientFactoryBean绫伙紝杩欓噷闄勫甫涓婏紝闃叉鐢ㄦ硶鍑洪敊
 
 2014-02-21 by liusan.dyf

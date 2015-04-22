@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="GB2312"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap
     PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="PostMapper">
 
-	<!-- Œƒ’¬±ÌSQL -->
+	<!-- ÊñáÁ´†Ë°®SQL -->
 	<!--2012-05-21-->
    	<typeAlias alias="Post" type="com.taobao.freeproj.domain.Post"/>
    	<typeAlias alias="PostEx" type="com.taobao.freeproj.domain.PostEx"/>
    	
-   	<!-- “™ π”√µΩPostEx∂‘œÛ∫Õ@postId≤Œ ˝ 2012.5.21 
-	2012-05-26 °æŒ Ã‚°ø£∫update ±£¨»Áπ˚÷ª∏¸–¬¡À“ª∏ˆ◊÷∂Œ£¨‘Ú¿˙ ∑±Ì¿Ô“≤ΩˆΩˆ÷ªº«¬º¡À’‚“ª∏ˆ◊÷∂Œµƒƒ⁄»›
+   	<!-- Ë¶Å‰ΩøÁî®Âà∞PostExÂØπË±°Âíå@postIdÂèÇÊï∞ 2012.5.21 
+	2012-05-26 „ÄêÈóÆÈ¢ò„ÄëÔºöupdateÊó∂ÔºåÂ¶ÇÊûúÂè™Êõ¥Êñ∞‰∫Ü‰∏Ä‰∏™Â≠óÊÆµÔºåÂàôÂéÜÂè≤Ë°®Èáå‰πü‰ªÖ‰ªÖÂè™ËÆ∞ÂΩï‰∫ÜËøô‰∏Ä‰∏™Â≠óÊÆµÁöÑÂÜÖÂÆπ
 	-->
    	<sql id="postExtra">
-   		<!--≤Â»Î”Î±Í«©°¢¿‡±µƒπÿ¡™πÿœµ-->
+   		<!--ÊèíÂÖ•‰∏éÊ†áÁ≠æ„ÄÅÁ±ªÂà´ÁöÑÂÖ≥ËÅîÂÖ≥Á≥ª-->
 		<dynamic>
 			<isNotNull property="catalogIdList">
 		    	<iterate property="catalogIdList" prepend="" conjunction="">
@@ -22,8 +22,8 @@
 			</isNotNull>
  		</dynamic>
  		
- 		<!--≤Â»Î¿˙ ∑±Ì
-		»Áπ˚ƒ⁄»›√ª”–∏ƒ±‰£¨‘Ú≤ª‘Ÿ≤Â»Î¿˙ ∑±Ì 2012-06-14 by liusan.dyf
+ 		<!--ÊèíÂÖ•ÂéÜÂè≤Ë°®
+		Â¶ÇÊûúÂÜÖÂÆπÊ≤°ÊúâÊîπÂèòÔºåÂàô‰∏çÂÜçÊèíÂÖ•ÂéÜÂè≤Ë°® 2012-06-14 by liusan.dyf
 		-->
 		<dynamic>
 			<isNotEqual prepend="" property="extra" compareValue="304">
@@ -33,8 +33,8 @@
 			</isNotEqual>
 		</dynamic>
 		
-		<!--∏¸–¬¿‡ƒø°¢±Í«©πÿ¡™µƒpost ˝ƒø
-		2012-05-31»°œ˚£¨∑≈µΩ≥Ã–ÚÕ‚√ÊÕ≥“ª¥¶¿Ì
+		<!--Êõ¥Êñ∞Á±ªÁõÆ„ÄÅÊ†áÁ≠æÂÖ≥ËÅîÁöÑpostÊï∞ÁõÆ
+		2012-05-31ÂèñÊ∂àÔºåÊîæÂà∞Á®ãÂ∫èÂ§ñÈù¢Áªü‰∏ÄÂ§ÑÁêÜ
 		-->
 		<!--
 		<dynamic>
@@ -49,15 +49,15 @@
 		-->
    	</sql>
    
-   <!-- “‘statement/insertÃÊªªselect£¨≥Ã–Ú÷– π”√sqlMapClient.insert()¿¥÷¥––”Ôæ‰£¨Ω‚æˆqueryForXXŒﬁœﬁ—≠ª∑µƒbug 2010-05-22 -->
+   <!-- ‰ª•statement/insertÊõøÊç¢selectÔºåÁ®ãÂ∫è‰∏≠‰ΩøÁî®sqlMapClient.insert()Êù•ÊâßË°åËØ≠Âè•ÔºåËß£ÂÜ≥queryForXXÊó†ÈôêÂæ™ÁéØÁöÑbug 2010-05-22 -->
   	<insert id="insert" parameterClass="PostEx">
-		<!--≤Â»Î÷˜±Ì-->
+		<!--ÊèíÂÖ•‰∏ªË°®-->
 		INSERT INTO r_post
 		(`title`,`content`,`author`,`authorUrl`,`createDate`,`source`,`sourceUrl`,`summary`,`status`,`modifier`,`modifiedDate`,`revision`,`modificationComment`,`isPublic`,`catalogs`)
 		VALUES
 		(#title#, #content#, #author#, #authorUrl#, now(), #source#, #sourceUrl#, #summary#, #status#, #modifier#, now(),#revision#,#modificationComment#,#isPublic#,#catalogs#);
 		
-		<!-- Ω´Œƒ’¬ID∏≥÷µ£¨”√”⁄∫Û√Êµƒπÿ¡™πÿœµ -->
+		<!-- Â∞ÜÊñáÁ´†IDËµãÂÄºÔºåÁî®‰∫éÂêéÈù¢ÁöÑÂÖ≥ËÅîÂÖ≥Á≥ª -->
 		SET @postId = LAST_INSERT_ID();
 
 		<include refid="postExtra"/>
@@ -69,10 +69,10 @@
 	</insert>
 	
 	<!--
-	2012-05-26 statusµƒisNotEqual by liusan.dyf
+	2012-05-26 statusÁöÑisNotEqual by liusan.dyf
 	-->
 	<insert id="update" parameterClass="PostEx">
-		<!--∏¸–¬÷˜±Ì-->
+		<!--Êõ¥Êñ∞‰∏ªË°®-->
 		update `r_post` set
 		<dynamic>
 			<isNotEmpty property="title">
@@ -113,7 +113,7 @@
 	        	`catalogs` = #catalogs#,
 	        </isNotEmpty>
 			
-			<!--2012-06-19 »Áπ˚ƒ⁄»›√ª”–∏ƒ±‰£¨‘Ú≤ª”√‘ˆº”∞Ê±æ∫≈-->
+			<!--2012-06-19 Â¶ÇÊûúÂÜÖÂÆπÊ≤°ÊúâÊîπÂèòÔºåÂàô‰∏çÁî®Â¢ûÂä†ÁâàÊú¨Âè∑-->
 			<isNotEqual prepend="" property="extra" compareValue="304">
 				`revision` = `revision` + 1,
 			</isNotEqual>
@@ -122,13 +122,13 @@
 				`modifiedDate` = now()
 		where `id` = #id#;
 				
-		<!-- Ω´Œƒ’¬ID∏≥÷µ£¨”√”⁄∫Û√Êµƒπÿ¡™πÿœµ -->
+		<!-- Â∞ÜÊñáÁ´†IDËµãÂÄºÔºåÁî®‰∫éÂêéÈù¢ÁöÑÂÖ≥ËÅîÂÖ≥Á≥ª -->
 		SET @postId = #id#;
 
 		<include refid="postExtra"/>		
 		
-		<!--…æ≥˝±ª…æ≥˝µƒ¿‡ƒø°¢±Í«©
-		»Áπ˚≤ª–ﬁ∏ƒcatalog£¨‘Ú∏√≤Œ ˝“™…Ë÷√Œ™null 2012-06-13£¨∑Ò‘Ú£¨ª·«Âø’‘≠¿¥…Ë÷√µƒ¿‡ƒø
+		<!--Âà†Èô§Ë¢´Âà†Èô§ÁöÑÁ±ªÁõÆ„ÄÅÊ†áÁ≠æ
+		Â¶ÇÊûú‰∏ç‰øÆÊîπcatalogÔºåÂàôËØ•ÂèÇÊï∞Ë¶ÅËÆæÁΩÆ‰∏∫null 2012-06-13ÔºåÂê¶ÂàôÔºå‰ºöÊ∏ÖÁ©∫ÂéüÊù•ËÆæÁΩÆÁöÑÁ±ªÁõÆ
 		-->		
 		<dynamic>
 			<isNotNull property="catalogIdList">
@@ -146,8 +146,8 @@
 	</select>
 	
 	<!-- 
-	∏˘æ›Œƒ’¬ID≤È—Øµ±«∞∞Ê±æ ˝£¨Œﬁ–Ë∑µªÿ’˚∏ˆŒƒ’¬∂‘œÛ£®“ÚŒ™Œƒ’¬ƒ⁄»›”–µƒ∫‹∂‡£©
-	”√”⁄∏¸–¬ ±ºÏ≤È∞Ê±æ «∑Ò «◊Ó–¬µƒ£¨»Áπ˚≤ª «£¨‘Ú∏¸–¬ ß∞‹ 
+	Ê†πÊçÆÊñáÁ´†IDÊü•ËØ¢ÂΩìÂâçÁâàÊú¨Êï∞ÔºåÊó†ÈúÄËøîÂõûÊï¥‰∏™ÊñáÁ´†ÂØπË±°ÔºàÂõ†‰∏∫ÊñáÁ´†ÂÜÖÂÆπÊúâÁöÑÂæàÂ§öÔºâ
+	Áî®‰∫éÊõ¥Êñ∞Êó∂Ê£ÄÊü•ÁâàÊú¨ÊòØÂê¶ÊòØÊúÄÊñ∞ÁöÑÔºåÂ¶ÇÊûú‰∏çÊòØÔºåÂàôÊõ¥Êñ∞Â§±Ë¥• 
 	-->
 	<select id="getRevisionNumberById" resultClass="int" parameterClass="int">
 		SELECT `revision` FROM `r_post` where id = #value# ;
@@ -197,8 +197,8 @@
 		</dynamic>
 	</sql>
 	
-	<!-- ∏˘æ›Œƒ’¬À˘ Ù¿‡ƒø£®ªÚ±Í«©£©°¢◊˜’ﬂ∫Õ ±º‰∑∂Œß≤È—Ø 
-	2012-05-22 by liusan.dyf –ﬁ∏ƒselect≥ˆµƒ◊÷∂Œ
+	<!-- Ê†πÊçÆÊñáÁ´†ÊâÄÂ±ûÁ±ªÁõÆÔºàÊàñÊ†áÁ≠æÔºâ„ÄÅ‰ΩúËÄÖÂíåÊó∂Èó¥ËåÉÂõ¥Êü•ËØ¢ 
+	2012-05-22 by liusan.dyf ‰øÆÊîπselectÂá∫ÁöÑÂ≠óÊÆµ
 	-->
 	<select id="getPagedList" resultClass="PostEx" parameterClass="hashmap">
 		SELECT a.`id`,
@@ -222,14 +222,14 @@
 		limit #skip#,#limit#;
 	</select>
 	
-	<!-- ∏˘æ›Œƒ’¬À˘ Ù¿‡ƒø£®ªÚ±Í«©£©°¢◊˜’ﬂ∫Õ ±º‰∑∂Œß≤È—Ø -->
+	<!-- Ê†πÊçÆÊñáÁ´†ÊâÄÂ±ûÁ±ªÁõÆÔºàÊàñÊ†áÁ≠æÔºâ„ÄÅ‰ΩúËÄÖÂíåÊó∂Èó¥ËåÉÂõ¥Êü•ËØ¢ -->
 	<select id="getCount" resultClass="int" parameterClass="hashmap">
 		SELECT count(0) 
 		<include refid="selectClause"/>	
 		;
 	</select>
 	
-	<!-- ∏˘æ›Œƒ’¬±‡∫≈ªÒ»°¿˙ ∑–≈œ¢ -->
+	<!-- Ê†πÊçÆÊñáÁ´†ÁºñÂè∑Ëé∑ÂèñÂéÜÂè≤‰ø°ÊÅØ -->
 	<select id="getPagedRevisionList" resultClass="PostEx" parameterClass="hashmap">
 		SELECT `id`,
 		  `title`,
@@ -251,18 +251,18 @@
 		limit #skip#,#limit#;
 	</select>
 	
-	<!-- ¿˙ ∑∞Ê±æ ˝ƒø -->
+	<!-- ÂéÜÂè≤ÁâàÊú¨Êï∞ÁõÆ -->
 	<select id="getRevisionsCount" resultClass="int" parameterClass="int">
 		SELECT count(0) FROM `r_post_history` where `postId` = #value#
 		;
 	</select>
 	
-	<!-- ∏˘æ›¿˙ ∑±‰∏¸ID≤È—ØŒƒ’¬∞Ê±æ£¨∞Ê±æ∂‘±» ±∂¡»°¡Ω¥Œ -->
+	<!-- Ê†πÊçÆÂéÜÂè≤ÂèòÊõ¥IDÊü•ËØ¢ÊñáÁ´†ÁâàÊú¨ÔºåÁâàÊú¨ÂØπÊØîÊó∂ËØªÂèñ‰∏§Ê¨° -->
 	<select id="getRevisionX" resultClass="PostEx" parameterClass="int">
 		SELECT * FROM `r_post_history` where `id` = #value#;
 	</select>
 	
-	<!-- ∏˘æ›¿˙ ∑±‰∏¸ID≤È—ØŒƒ’¬∞Ê±æ£¨∞Ê±æ∂‘±» ±∂¡»°¡Ω¥Œ -->
+	<!-- Ê†πÊçÆÂéÜÂè≤ÂèòÊõ¥IDÊü•ËØ¢ÊñáÁ´†ÁâàÊú¨ÔºåÁâàÊú¨ÂØπÊØîÊó∂ËØªÂèñ‰∏§Ê¨° -->
 	<select id="getRevisionListX" resultClass="PostEx" parameterClass="hashmap">
 		SELECT * FROM `r_post_history` where `id` in 
 		<iterate property="idList" open="(" close=")" conjunction=",">   
@@ -271,7 +271,7 @@
 		;
 	</select>
 	
-	<!-- ∏˘æ›¿˙ ∑±‰∏¸ID≤È—ØŒƒ’¬∞Ê±æ£¨∞Ê±æ∂‘±» ±∂¡»°¡Ω¥Œ -->
+	<!-- Ê†πÊçÆÂéÜÂè≤ÂèòÊõ¥IDÊü•ËØ¢ÊñáÁ´†ÁâàÊú¨ÔºåÁâàÊú¨ÂØπÊØîÊó∂ËØªÂèñ‰∏§Ê¨° -->
 	<select id="getRevision" resultClass="PostEx" parameterClass="hashmap">
 		SELECT * FROM `r_post_history` where `postId` = #postId# and `revision`=#revision# limit 1;
 	</select>
@@ -280,8 +280,8 @@
 		DELETE FROM `r_post` WHERE id = #value#;
 	</delete>
 	
-	<!--2012-05-31 by liusan.dyf ‘⁄sync∫ÕaddToCatalog¿Ô π”√
-	ƒ©Œ≤≤ª“™∑÷∫≈£¨∫Û√Êø…ƒ‹ªπ”–Ãıº˛ 2012-06-13
+	<!--2012-05-31 by liusan.dyf Âú®syncÂíåaddToCatalogÈáå‰ΩøÁî®
+	Êú´Â∞æ‰∏çË¶ÅÂàÜÂè∑ÔºåÂêéÈù¢ÂèØËÉΩËøòÊúâÊù°‰ª∂ 2012-06-13
 	-->
 	<sql id="syncClause">
 		UPDATE 
@@ -297,9 +297,9 @@
 	</sql>
 	
 	<!--2012-05-31 by liusan.dyf
-	1£¨Õ¨≤Ωpost±Ìµƒcatalogs»ﬂ”‡◊÷∂Œµƒ÷µ
-	2£¨…æ≥˝µÙ“—æ≠…æ≥˝¡Àµƒtag°¢¿‡±
-	TODO Õ¨≤Ω ˝¡ø
+	1ÔºåÂêåÊ≠•postË°®ÁöÑcatalogsÂÜó‰ΩôÂ≠óÊÆµÁöÑÂÄº
+	2ÔºåÂà†Èô§ÊéâÂ∑≤ÁªèÂà†Èô§‰∫ÜÁöÑtag„ÄÅÁ±ªÂà´
+	TODO ÂêåÊ≠•Êï∞Èáè
 	-->
 	<update id="sync">
 		DELETE FROM r_post_cata_relation WHERE `catalogId` NOT IN(SELECT `code` FROM `common_catalog`);
@@ -308,16 +308,16 @@
 		;
 	</update>
 	
-	<!--2012-05-31 by liusan.dyf ∞—“ª≈˙postπÈ¿‡µΩƒ≥∏ˆ¿‡±
-	»∑±£idList≤ªƒ‹Œ™ø’¡–±Ì
+	<!--2012-05-31 by liusan.dyf Êää‰∏ÄÊâπpostÂΩíÁ±ªÂà∞Êüê‰∏™Á±ªÂà´
+	Á°Æ‰øùidList‰∏çËÉΩ‰∏∫Á©∫ÂàóË°®
 	-->
 	<update id="addToCatalog" parameterClass="hashmap">
-		<!--≤Â»Îπÿ¡™±Ì-->
+		<!--ÊèíÂÖ•ÂÖ≥ËÅîË°®-->
 		<iterate property="idList" open="" close="" conjunction="">   
 			insert ignore into r_post_cata_relation (postId,catalogId) values(#idList[]#,#catalogId#);
 		</iterate>
 		
-		<!--∏¸–¬»ﬂ”‡-->
+		<!--Êõ¥Êñ∞ÂÜó‰Ωô-->
 		<include refid="syncClause"/>	
 		where a.id in
 		<iterate property="idList" open="(" close=")" conjunction=",">   
@@ -326,16 +326,16 @@
 		;
 	</update>
 	
-	<!--2012-05-31 by liusan.dyf ∞—“ª≈˙post¥”ƒ≥∏ˆ¿‡±¿Ô≈≈≥˝
-	»∑±£idList≤ªƒ‹Œ™ø’¡–±Ì
+	<!--2012-05-31 by liusan.dyf Êää‰∏ÄÊâπpost‰ªéÊüê‰∏™Á±ªÂà´ÈáåÊéíÈô§
+	Á°Æ‰øùidList‰∏çËÉΩ‰∏∫Á©∫ÂàóË°®
 	-->
 	<update id="excludeCatalog" parameterClass="hashmap">
-		<!--…æ≥˝πÿ¡™±Ì-->
+		<!--Âà†Èô§ÂÖ≥ËÅîË°®-->
 		<iterate property="idList" open="" close="" conjunction="">   
 			delete from r_post_cata_relation where postId= #idList[]# and catalogId = #catalogId#;
 		</iterate>
 		
-		<!--∏¸–¬»ﬂ”‡-->
+		<!--Êõ¥Êñ∞ÂÜó‰Ωô-->
 		<include refid="syncClause"/>	
 		where a.id in
 		<iterate property="idList" open="(" close=")" conjunction=",">   
@@ -344,7 +344,7 @@
 		;
 	</update>
 	
-	<!-- 2012-06-05 …æ≥˝ -->
+	<!-- 2012-06-05 Âà†Èô§ -->
 	<delete id="delete" parameterClass="hashmap">
 		DELETE FROM `r_post` where `id` in 
 		<iterate property="idList" open="(" close=")" conjunction=",">   
@@ -358,8 +358,8 @@
 		;
 	</delete>
 	
-	<!-- ∏˘æ›¿‡ƒø±‡∫≈¡–±Ì¿¥¿≠»°Œƒ’¬ 2012-06-11
-	≤Œ ˝¿Ô“™∞¸∫¨catalogidList£¨¿‡–ÕList<long>£ªlimit£¨¿‡–Õint
+	<!-- Ê†πÊçÆÁ±ªÁõÆÁºñÂè∑ÂàóË°®Êù•ÊãâÂèñÊñáÁ´† 2012-06-11
+	ÂèÇÊï∞ÈáåË¶ÅÂåÖÂê´catalogidListÔºåÁ±ªÂûãList<long>ÔºõlimitÔºåÁ±ªÂûãint
 	-->
 	<select id="getTopByCatalogs" resultClass="PostEx" parameterClass="hashmap">
 		SELECT title,id FROM r_post WHERE id IN 
@@ -374,8 +374,8 @@
 	</select>
 	
 	<!--
-	’“≥ˆÕ¨ ±æﬂ”–2∏ˆƒø¬ºµƒpostµƒ±‡∫≈¡–±Ì 2012-06-14 by liusan.dyf
-	≤Œ ˝Œ™2∏ˆ¿‡ƒø±‡∫≈
+	ÊâæÂá∫ÂêåÊó∂ÂÖ∑Êúâ2‰∏™ÁõÆÂΩïÁöÑpostÁöÑÁºñÂè∑ÂàóË°® 2012-06-14 by liusan.dyf
+	ÂèÇÊï∞‰∏∫2‰∏™Á±ªÁõÆÁºñÂè∑
 	-->
 	<select id="getIdList_IntersectCatalogs" resultClass="int" parameterClass="hashmap">
 		SELECT a.postId FROM r_post_cata_relation a
@@ -386,9 +386,9 @@
 	
 	<!--
 	2012-06-15 by liusan.dyf
-	“µŒÒ∑Ω∑®£¨≤ªÕ®”√£¨’“µΩƒƒ–©Ãıƒø£®“˝”√£©±ªΩ‚∂¡π˝
-	“˝”√µƒ∑∂Œß «777ø™Õ∑µƒ9Œª ˝◊÷
-	Ω‚∂¡±‡∫≈Œ™555569382
+	‰∏öÂä°ÊñπÊ≥ïÔºå‰∏çÈÄöÁî®ÔºåÊâæÂà∞Âì™‰∫õÊù°ÁõÆÔºàÂºïÁî®ÔºâË¢´Ëß£ËØªËøá
+	ÂºïÁî®ÁöÑËåÉÂõ¥ÊòØ777ÂºÄÂ§¥ÁöÑ9‰ΩçÊï∞Â≠ó
+	Ëß£ËØªÁºñÂè∑‰∏∫555569382
 	-->
 	<select id="getQuotedEntryIdList" resultClass="int">
 		SELECT a.catalogId FROM r_post_cata_relation a

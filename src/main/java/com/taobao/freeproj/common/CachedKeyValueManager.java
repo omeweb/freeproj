@@ -13,8 +13,8 @@ import com.taobao.freeproj.dao.KeyValueDao;
 import com.taobao.freeproj.domain.KeyValue;
 
 /**
- * Õë¶ÔKeyValueDaoÌá¹©»º´æ·şÎñ£¬Èô±»ÊµÀı»¯¶à·İ£¬ÔòÏàÍ¬µÄtypeCodeµÄkv»á±»»º´æ¶à·İ£¬×¢Òâinit·½·¨ 2012-09-26<br />
- * Ôİ²»Ìá¹©ÑÓ³Ù¼ÓÔØ¹¦ÄÜ
+ * é’ˆå¯¹KeyValueDaoæä¾›ç¼“å­˜æœåŠ¡ï¼Œè‹¥è¢«å®ä¾‹åŒ–å¤šä»½ï¼Œåˆ™ç›¸åŒçš„typeCodeçš„kvä¼šè¢«ç¼“å­˜å¤šä»½ï¼Œæ³¨æ„initæ–¹æ³• 2012-09-26<br />
+ * æš‚ä¸æä¾›å»¶è¿ŸåŠ è½½åŠŸèƒ½
  * 
  * @author liusan.dyf
  */
@@ -23,8 +23,8 @@ public class CachedKeyValueManager extends tools.InitializeOnce {
 	public static final int DEFAULT_TTL = -1;
 
 	/**
-	 * Ö§³ÖÑÓ³Ù³õÊ¼»¯ 2012-11-23 by liusan.dyf<br />
-	 * 2013-02-26È¡Ïûstatic£¬ÕâÑù¿ÉÒÔ»º´æ¶à¸ötypeCode£¬Ö»Òª¸ÃÀàµÄÊµÀı²»Ò»Ñù by liusan.dyf
+	 * æ”¯æŒå»¶è¿Ÿåˆå§‹åŒ– 2012-11-23 by liusan.dyf<br />
+	 * 2013-02-26å–æ¶ˆstaticï¼Œè¿™æ ·å¯ä»¥ç¼“å­˜å¤šä¸ªtypeCodeï¼Œåªè¦è¯¥ç±»çš„å®ä¾‹ä¸ä¸€æ · by liusan.dyf
 	 */
 	// private/* static */AtomicBoolean ready = new AtomicBoolean(false);
 
@@ -35,18 +35,18 @@ public class CachedKeyValueManager extends tools.InitializeOnce {
 	private String typeCode = null;
 
 	/**
-	 * ÒªÏÈÉèÖÃtypeCode
+	 * è¦å…ˆè®¾ç½®typeCode
 	 */
 	@Override
 	protected void doInitialize() {
 		if (tools.StringUtil.isNullOrEmpty(typeCode))
-			throw new IllegalArgumentException("typeCode²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("typeCodeä¸èƒ½ä¸ºç©º");
 
 		refreshAll();
 	}
 
 	public int refreshAll() {
-		// ¹¹Ôì²éÑ¯²ÎÊı
+		// æ„é€ æŸ¥è¯¢å‚æ•°
 		Map<String, Object> query = tools.MapUtil.create();
 		query.put("typeCode", typeCode);
 
@@ -55,15 +55,15 @@ public class CachedKeyValueManager extends tools.InitializeOnce {
 		if (pagedList == null)
 			return 0;
 
-		// »º´æ
+		// ç¼“å­˜
 		for (KeyValue item : pagedList.getList()) {
 			getCacheProvider().set(item.getKey(), getValueFrom(item), DEFAULT_TTL);
 
 			if (logger.isDebugEnabled())
-				logger.debug("¼ÓÔØ½áÊø£º" + typeCode + "." + item.getKey());
+				logger.debug("åŠ è½½ç»“æŸï¼š" + typeCode + "." + item.getKey());
 		}
 
-		// logger.warn("¼ÓÔØ" + typeCode + "½áÊø£¬count£º" + pagedList.getList().size());
+		// logger.warn("åŠ è½½" + typeCode + "ç»“æŸï¼Œcountï¼š" + pagedList.getList().size());
 
 		// LogFactory.getLog("system").warn(cacheProvider.getAll());
 
@@ -71,7 +71,7 @@ public class CachedKeyValueManager extends tools.InitializeOnce {
 	}
 
 	/**
-	 * ¶ÔÔ­Öµ½øĞĞÒ»Ğ©ĞŞÕı 2013-03-04 by liusan.dyf
+	 * å¯¹åŸå€¼è¿›è¡Œä¸€äº›ä¿®æ­£ 2013-03-04 by liusan.dyf
 	 * 
 	 * @param entry
 	 * @return
@@ -91,16 +91,16 @@ public class CachedKeyValueManager extends tools.InitializeOnce {
 	}
 
 	/**
-	 * ÕâÀï²»»á´ÓKVÀïÉ¾³ı 2013-09-28 by liusan.dyf
+	 * è¿™é‡Œä¸ä¼šä»KVé‡Œåˆ é™¤ 2013-09-28 by liusan.dyf
 	 * 
 	 * @param key
 	 * @return
 	 */
 	public boolean remove(String key) {
-		if (!this.isInitialized())// Èç¹û»¹Ã»ÓĞ×¼±¸ºÃ£¬Ôò²»Ö´ĞĞ 2013-03-08 by liusan.dyf
+		if (!this.isInitialized())// å¦‚æœè¿˜æ²¡æœ‰å‡†å¤‡å¥½ï¼Œåˆ™ä¸æ‰§è¡Œ 2013-03-08 by liusan.dyf
 			return false;
 
-		logger.warn("É¾³ı" + typeCode + "£º" + key);
+		logger.warn("åˆ é™¤" + typeCode + "ï¼š" + key);
 
 		// keyValueDao.deleteOne(typeCode, key);
 		Object temp = getCacheProvider().remove(key);
@@ -108,10 +108,10 @@ public class CachedKeyValueManager extends tools.InitializeOnce {
 	}
 
 	public boolean reload(String key) {
-		if (!this.isInitialized())// Èç¹û»¹Ã»ÓĞ×¼±¸ºÃ£¬Ôò²»Ö´ĞĞ 2013-03-08 by liusan.dyf
+		if (!this.isInitialized())// å¦‚æœè¿˜æ²¡æœ‰å‡†å¤‡å¥½ï¼Œåˆ™ä¸æ‰§è¡Œ 2013-03-08 by liusan.dyf
 			return false;
 
-		logger.warn("ÖØĞÂ¼ÓÔØ" + typeCode + "£º" + key);
+		logger.warn("é‡æ–°åŠ è½½" + typeCode + "ï¼š" + key);
 
 		KeyValue entry = keyValueDao.getOne(typeCode, key);
 		getCacheProvider().set(entry.getKey(), getValueFrom(entry), DEFAULT_TTL);

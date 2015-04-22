@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="GB2312"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap
     PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
@@ -21,7 +21,7 @@
 		<result property="sortNumber"    column="sortNumber" />
 	</resultMap>
    	
-   	<!--2012-04-10 by liusan.dyf£¬½ö½ö»ñÈ¡keyÁĞ±í-->
+   	<!--2012-04-10 by liusan.dyfï¼Œä»…ä»…è·å–keyåˆ—è¡¨-->
    	<select id="getKeysByTypeCode" resultClass="String" parameterClass="hashmap">
  		SELECT `key_` as `key` FROM $reservedValue$ where typeCode=#typeCode# and status>=0 
  		<dynamic>
@@ -32,7 +32,7 @@
  		;
 	</select>
 	
-   	<!--ÕâÀïÖ»À­È¡Õı³£µÄkv-->
+   	<!--è¿™é‡Œåªæ‹‰å–æ­£å¸¸çš„kv-->
 	<select id="getListByTypeCode" resultMap="defaultMap" parameterClass="hashmap">
  		SELECT * FROM $reservedValue$ where typeCode=#typeCode# and status>=0 
 		<dynamic>
@@ -43,19 +43,19 @@
  		;
 	</select>
 	
-	<!--2012-03-31 È¥µôstatusÏŞÖÆÌõ¼ş-->
+	<!--2012-03-31 å»æ‰statusé™åˆ¶æ¡ä»¶-->
 	<select id="getOne" resultMap="defaultMap" parameterClass="hashmap">
  		SELECT * FROM $reservedValue$ where typeCode=#typeCode# and `key_`=#key# limit 1;
 	</select>
 
-	<!--2014-11-17 by ÁùÈı-->
+	<!--2014-11-17 by å…­ä¸‰-->
 	<select id="getById" resultMap="defaultMap" parameterClass="hashmap">
  		SELECT * FROM $reservedValue$ where id=#id#;
 	</select>
 	
-	<!--2011-11-08 valueÒ²ÒªÇó¿ÉÒÔÄ£ºı²éÑ¯£¬Ç¿ÖÆÊ¹ÓÃtypeCode
-	2012-09-28Ôö¼ÓreservedString¡¢reservedInt
-	2012-11-23Ôö¼Ókey_pattern£¬Æ¥ÅäÄ£Ê½×Ô¶¨Òå
+	<!--2011-11-08 valueä¹Ÿè¦æ±‚å¯ä»¥æ¨¡ç³ŠæŸ¥è¯¢ï¼Œå¼ºåˆ¶ä½¿ç”¨typeCode
+	2012-09-28å¢åŠ reservedStringã€reservedInt
+	2012-11-23å¢åŠ key_patternï¼ŒåŒ¹é…æ¨¡å¼è‡ªå®šä¹‰
 	-->
 	<sql id="queryWhereClause">
 		typeCode=#typeCode# 
@@ -93,7 +93,7 @@
  				and `reservedInt` = #reservedInt#
  			</isNotEmpty>
 			
-			<!--2013-12-05£¬×îºó¸üĞÂÊ±¼äÔçÓÚxxx by liusan.dyf-->
+			<!--2013-12-05ï¼Œæœ€åæ›´æ–°æ—¶é—´æ—©äºxxx by liusan.dyf-->
 			<isNotEmpty property="minLastUpdateTime">
 				and `lastUpdateTime` &gt; #minLastUpdateTime#
 			</isNotEmpty>
@@ -105,10 +105,10 @@
 	</sql>
 	
 	<!--2011-11-07 14:51 by 63
-	2012-04-16 ×·¼Ó dynamicµÄorderBy by liusan.dyf
-	2012-09-26 Ôö¼Ó noValue by liusan.dyf
-	2012-09-27 Ôö¼Ó`creator`,`lastOperator`
-	2014-11-17 orderByÓĞ°×Ãûµ¥¿ØÖÆ by ÁùÈı
+	2012-04-16 è¿½åŠ  dynamicçš„orderBy by liusan.dyf
+	2012-09-26 å¢åŠ  noValue by liusan.dyf
+	2012-09-27 å¢åŠ `creator`,`lastOperator`
+	2014-11-17 orderByæœ‰ç™½åå•æ§åˆ¶ by å…­ä¸‰
 	-->
 	<select id="getPagedList" resultMap="defaultMap" parameterClass="hashmap">
  		SELECT id,`key_`,
@@ -129,14 +129,14 @@
 		limit #skip#,#limit#;
 	</select>
 	
-	<!--2011-11-07 15:13 by 63 ºÍgetPagedListÒ»ÆğÊ¹ÓÃ-->
+	<!--2011-11-07 15:13 by 63 å’ŒgetPagedListä¸€èµ·ä½¿ç”¨-->
 	<select id="getCount" resultClass="int" parameterClass="hashmap">
  		SELECT count(0) FROM $reservedValue$ where <include refid="queryWhereClause" />;
 	</select>
 	
 	<!--2012-03-31 by 63
-	2012-10-15 by liusan.dyf Ôö¼ÓkeyµÄdynamicÊôĞÔ
-	2014-11-17 Ôö¼Ólimit by ÁùÈı
+	2012-10-15 by liusan.dyf å¢åŠ keyçš„dynamicå±æ€§
+	2014-11-17 å¢åŠ limit by å…­ä¸‰
 	-->
 	<delete id="delete" parameterClass="hashmap">
  		delete FROM $reservedValue$ WHERE typeCode=#typeCode# 
@@ -149,9 +149,9 @@
 	</delete>
 	
 	<!--2012-05-25 by 63
-	2012-05-25 ×¢Òâ£¬²»°üÀ¨ set
-	2012-09-27 Ôö¼ÓlastOperator by liusan.dyf
-	2012-09-28Ôö¼ÓreservedString¡¢reservedInt
+	2012-05-25 æ³¨æ„ï¼Œä¸åŒ…æ‹¬ set
+	2012-09-27 å¢åŠ lastOperator by liusan.dyf
+	2012-09-28å¢åŠ reservedStringã€reservedInt
 	-->
 	<sql id="updateClause">
 		<dynamic>			
@@ -161,7 +161,7 @@
 				</isNotEqual>
 			</isNotEmpty>
 
-			<!-- 2014-11-17 by ÁùÈı -->
+			<!-- 2014-11-17 by å…­ä¸‰ -->
 			<isNotEmpty property="sortNumber">
 				<isNotEqual prepend="" property="sortNumber" compareValue="9527">
 					`sortNumber` = #sortNumber#,
@@ -192,7 +192,7 @@
 	</sql>
  	
 	<!--2012-03-31
-	2014-11-17 Ôö¼Ólimit by ÁùÈı
+	2014-11-17 å¢åŠ limit by å…­ä¸‰
 	-->
 	<update id="update" parameterClass="KeyValue">
 		update $reservedValue$ set 
@@ -200,9 +200,9 @@
 		WHERE typeCode=#typeCode# and `key_` = #key# limit 1;
 	</update>
 	
-	<!--2012-05-26 by liusan.dyf ºóÃæÒª½Óupdate·Ö¾ä
-	2012-09-26Ôö¼Ócreator,lastOperator
-	2012-09-28Ôö¼ÓreservedString¡¢reservedInt
+	<!--2012-05-26 by liusan.dyf åé¢è¦æ¥updateåˆ†å¥
+	2012-09-26å¢åŠ creator,lastOperator
+	2012-09-28å¢åŠ reservedStringã€reservedInt
 	-->
 	<sql id="insertIgnoreClause">
 		INSERT ignore INTO $reservedValue$ (`key_`,`value`,`typeCode`,`comment`,`status`,`lastUpdateTime`,`creator`,`lastOperator`,`createTime`,reservedString,reservedInt,sortNumber) 
@@ -210,10 +210,10 @@
 		ON DUPLICATE KEY UPDATE
 	</sql>
 
-	<!--²åÈëÊ§°Ü£¬Ô­ÒòÎ´Öª2011-11-04  ÒòÎª Ä¬ÈÏÃ»ÓĞ¿ªÆôÊÂÎñÌá½» 2011-11-05 
-	2012-04-06 Ôö¼Ó ignore
-	2012-04-12 Èç¹ûÃ»ÓĞselectKey£¬Ôòmapper.insertµÄ·µ»ØÖµÎªnull
-	2012-04-13 selectKeyµÄkeyPropertyÒ»¶¨ÒªÊÇparameterClassÀàĞÍµÄÒ»¸öÊôĞÔ
+	<!--æ’å…¥å¤±è´¥ï¼ŒåŸå› æœªçŸ¥2011-11-04  å› ä¸º é»˜è®¤æ²¡æœ‰å¼€å¯äº‹åŠ¡æäº¤ 2011-11-05 
+	2012-04-06 å¢åŠ  ignore
+	2012-04-12 å¦‚æœæ²¡æœ‰selectKeyï¼Œåˆ™mapper.insertçš„è¿”å›å€¼ä¸ºnull
+	2012-04-13 selectKeyçš„keyPropertyä¸€å®šè¦æ˜¯parameterClassç±»å‹çš„ä¸€ä¸ªå±æ€§
 	-->
 	<insert id="insert" parameterClass="KeyValue">
  		<include refid="insertIgnoreClause"/>
@@ -225,7 +225,7 @@
 	</insert>
 	
 	<!--2012-05-26 by liusan.dyf
-	´ÓclientÅúÁ¿Ìá½»KV£¬ÎŞ·¨ÍêÕûĞòÁĞ»¯ÎªCollection<KeyValue>£¬Ö»ÄÜÊÇCollection<Map>½á¹¹
+	ä»clientæ‰¹é‡æäº¤KVï¼Œæ— æ³•å®Œæ•´åºåˆ—åŒ–ä¸ºCollection<KeyValue>ï¼Œåªèƒ½æ˜¯Collection<Map>ç»“æ„
 	-->
 	<insert id="insert_" parameterClass="hashmap">
  		<include refid="insertIgnoreClause"/>

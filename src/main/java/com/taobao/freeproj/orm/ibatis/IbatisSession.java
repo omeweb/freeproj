@@ -8,11 +8,11 @@ import com.ibatis.sqlmap.client.SqlMapClient;
 import com.taobao.freeproj.orm.Session;
 
 /**
- * Ä¿Ç°²»Ö§³ÖÊÂÎñ
+ * ç›®å‰ä¸æ”¯æŒäº‹åŠ¡
  * 
  * @author <a href="mailto:liusan.dyf@taobao.com">liusan.dyf</a>
  * @version 1.0
- * @since 2015Äê4ÔÂ8ÈÕ
+ * @since 2015å¹´4æœˆ8æ—¥
  */
 public class IbatisSession implements Session {
 	private SqlMapClient raw;
@@ -21,7 +21,7 @@ public class IbatisSession implements Session {
 	private boolean autoCommit;
 
 	/**
-	 * ÊÇ·ñÒÑ¾­Ö´ĞĞ¹ıcommit²Ù×÷ 2015-4-9 20:47:53 by ÁùÈı
+	 * æ˜¯å¦å·²ç»æ‰§è¡Œè¿‡commitæ“ä½œ 2015-4-9 20:47:53 by å…­ä¸‰
 	 */
 	private boolean isCommitted = false;// committed
 

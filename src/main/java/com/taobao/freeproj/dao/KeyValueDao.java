@@ -9,20 +9,20 @@ import tools.PagedList;
 import com.taobao.freeproj.domain.KeyValue;
 
 /**
- * ÎªÁËÊÊÓ¦²»Í¬µÄ´æ´¢½éÖÊ£¬¶øÔö¼Ó¸Ã½Ó¿Ú 2011-11-08
+ * ä¸ºäº†é€‚åº”ä¸åŒçš„å­˜å‚¨ä»‹è´¨ï¼Œè€Œå¢åŠ è¯¥æ¥å£ 2011-11-08
  * 
  * @author liusan.dyf
  */
 public interface KeyValueDao {
 	/**
-	 * 2011-11-11 by 63£¬ÎªÁË¸ÄÉÆÅúÁ¿²åÈëĞÔÄÜ
+	 * 2011-11-11 by 63ï¼Œä¸ºäº†æ”¹å–„æ‰¹é‡æ’å…¥æ€§èƒ½
 	 * 
 	 * @param list
 	 */
 	int addBatch(Collection<Object> list);
 
 	/**
-	 * ·µ»Ø²åÈëºóµÄid»òÕßÊÇÆäËûÊ²Ã´¶«Î÷ 2012-04-12
+	 * è¿”å›æ’å…¥åçš„idæˆ–è€…æ˜¯å…¶ä»–ä»€ä¹ˆä¸œè¥¿ 2012-04-12
 	 * 
 	 * @param entry
 	 * @return
@@ -46,7 +46,7 @@ public interface KeyValueDao {
 	KeyValue getOne(String typeCode, String key);
 
 	/**
-	 * 2014-11-17 by ÁùÈı
+	 * 2014-11-17 by å…­ä¸‰
 	 * 
 	 * @param id
 	 * @return
@@ -54,7 +54,7 @@ public interface KeyValueDao {
 	KeyValue getById(long id);
 
 	/**
-	 * Í¬Ò»¸ötypeCodeÏÂ£¬¶à¸ökey¿ÉÒÔÖ¸ÏòÍ¬Ò»¸övalue£¬ÕâÀïÕÒµ½×îºóÖ¸ÏòµÄÄÇ¸öKV¶ÔÏó·µ»Ø 2013-07-11 by liusan.dyf
+	 * åŒä¸€ä¸ªtypeCodeä¸‹ï¼Œå¤šä¸ªkeyå¯ä»¥æŒ‡å‘åŒä¸€ä¸ªvalueï¼Œè¿™é‡Œæ‰¾åˆ°æœ€åæŒ‡å‘çš„é‚£ä¸ªKVå¯¹è±¡è¿”å› 2013-07-11 by liusan.dyf
 	 * 
 	 * @param typeCode
 	 * @param key

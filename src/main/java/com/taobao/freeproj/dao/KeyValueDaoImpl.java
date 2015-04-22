@@ -12,8 +12,8 @@ import com.taobao.freeproj.domain.KeyValue;
 import com.taobao.freeproj.orm.AbstractDao;
 
 /**
- * »ùÓÚibatis2µÄdao²ã£¬ÇëÈ·±£ÔÚµ÷ÓÃdao²ã·½·¨Ê±Êı¾İÒÑ¾­µÃµ½Ğ£Ñé 2011-11-08 ¼ÓÈëÁË·Ö±í¹¦ÄÜ <br />
- * ·Ö±í²ÉÓÃkeyµÄ·½Ê½£¬Ò»¸öÊµÀı£¬Ö»²Ù×÷Ò»ÕÅ±í 2012-03-26
+ * åŸºäºibatis2çš„daoå±‚ï¼Œè¯·ç¡®ä¿åœ¨è°ƒç”¨daoå±‚æ–¹æ³•æ—¶æ•°æ®å·²ç»å¾—åˆ°æ ¡éªŒ 2011-11-08 åŠ å…¥äº†åˆ†è¡¨åŠŸèƒ½ <br />
+ * åˆ†è¡¨é‡‡ç”¨keyçš„æ–¹å¼ï¼Œä¸€ä¸ªå®ä¾‹ï¼Œåªæ“ä½œä¸€å¼ è¡¨ 2012-03-26
  * 
  * @author liusan.dyf
  */
@@ -28,18 +28,18 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	private static final String KEYWORD = "keyword";
 
 	/**
-	 * ±íÊ¾·Ö±íµÄ±íÃû£¬ÓÃ×¢ÈëµÄ·½Ê½¸³Öµ 2013-08-02 by liusan.dyf
+	 * è¡¨ç¤ºåˆ†è¡¨çš„è¡¨åï¼Œç”¨æ³¨å…¥çš„æ–¹å¼èµ‹å€¼ 2013-08-02 by liusan.dyf
 	 */
 	private String key = "common_key_value";
 
 	/**
-	 * ×ªÒÆµ½kvdaoÀïÃæ 2015-4-21 10:06:13 by ÁùÈı
+	 * è½¬ç§»åˆ°kvdaoé‡Œé¢ 2015-4-21 10:06:13 by å…­ä¸‰
 	 */
 	public void loadSettings() {
-		// ===¼ÓÔØÈ«¾ÖÉèÖÃ£¬´ÓÊı¾İ¿âÀï¼ÓÔØ
+		// ===åŠ è½½å…¨å±€è®¾ç½®ï¼Œä»æ•°æ®åº“é‡ŒåŠ è½½
 		KeyValue kv = this.getOne("50", "globalSettings");
 		if (kv == null) {
-			return; // Ö±½ÓÍË³ö
+			return; // ç›´æ¥é€€å‡º
 		}
 
 		@SuppressWarnings("unchecked")
@@ -54,21 +54,21 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	}
 
 	/**
-	 * 2012-03-12 by liusan.dyf 2012-04-11 ĞŞ¸ÄÎªpublic£¬ÏëÔÚ×ÓÀàÀïÖØĞ´
+	 * 2012-03-12 by liusan.dyf 2012-04-11 ä¿®æ”¹ä¸ºpublicï¼Œæƒ³åœ¨å­ç±»é‡Œé‡å†™
 	 * 
 	 * @param entry
 	 */
 	public void validate(KeyValue entry) {
 		if (entry == null)
-			throw new IllegalArgumentException("entry¶ÔÏó²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entryå¯¹è±¡ä¸èƒ½ä¸ºç©º");
 
 		if (tools.StringUtil.isNullOrEmpty(entry.getKey()))
-			throw new IllegalArgumentException("entry.key²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entry.keyä¸èƒ½ä¸ºç©º");
 
 		// if (tools.Validate.isBlank(entry.getreservedValue()))
-		entry.setReservedValue(getKey());// ÇĞ¼Ç
+		entry.setReservedValue(getKey());// åˆ‡è®°
 
-		// key²»ÔÊĞíhtml´úÂë 2012-02-15
+		// keyä¸å…è®¸htmlä»£ç  2012-02-15
 		entry.setKey(tools.StringUtil.encodeHTML(entry.getKey()));
 
 		// status 2012-03-31
@@ -84,13 +84,13 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	 */
 	public long save(KeyValue entry) {
 		if (entry == null)
-			throw new IllegalArgumentException("entry¶ÔÏó²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("entryå¯¹è±¡ä¸èƒ½ä¸ºç©º");
 
 		// KeyValue keyValue = getOne(entry.getTypeCode(), entry.getKey());
-		// if (keyValue != null)// ¸üĞÂ
+		// if (keyValue != null)// æ›´æ–°
 		// return update(entry);
 		// else
-		return add(entry);// ²åÈë
+		return add(entry);// æ’å…¥
 	}
 
 	public long add(KeyValue entry) {
@@ -98,37 +98,37 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 
 		entry.setStatus(10);// 2012-03-31
 
-		// 2012-04-12È¡ÏûÅĞ¶Ï£¬ÓÉinsert ignore Íê³É
-		// // Í¬Ò»Àà±ğkey²»ÄÜÖØ¸´
+		// 2012-04-12å–æ¶ˆåˆ¤æ–­ï¼Œç”±insert ignore å®Œæˆ
+		// // åŒä¸€ç±»åˆ«keyä¸èƒ½é‡å¤
 		// KeyValue keyValue = getOne(entry.getTypeId(), entry.getKey());
 		// if (keyValue != null)
-		// throw new IllegalArgumentException("keyÖØ¸´£¬²»ÄÜÌí¼Ó");
+		// throw new IllegalArgumentException("keyé‡å¤ï¼Œä¸èƒ½æ·»åŠ ");
 
 		// 2012-06-01 eventargs
 		long v = tools.Convert.toLong(super.insert(entry), 0);
 
-		return v == 0 ? 1 : v;// Õâ¸ö·½·¨ÊÇ²»¿ÉÄÜ·µ»Ø0µÄ£¬ËùÒÔÕâÀï×öÁËÅĞ¶Ï£¬Îª0¾Í·µ»Ø1 2015-4-10 12:01:24 by ÁùÈı
+		return v == 0 ? 1 : v;// è¿™ä¸ªæ–¹æ³•æ˜¯ä¸å¯èƒ½è¿”å›0çš„ï¼Œæ‰€ä»¥è¿™é‡Œåšäº†åˆ¤æ–­ï¼Œä¸º0å°±è¿”å›1 2015-4-10 12:01:24 by å…­ä¸‰
 	}
 
 	public KeyValue getOne(String typeCode, String key) {
-		// ¹¹Ôì²ÎÊı
+		// æ„é€ å‚æ•°
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put(KEY, key);
 		data.put(TYPE_CODE, typeCode);
-		data.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		data.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 
 		return super.getOne(data);
 	}
 
 	/**
-	 * ½ö½öÊÇ¶ÁÈ¡µ¥¸ökvµÄÊ±ºò£¬²Å»á¸ù¾İvalueµÄlinkÊôĞÔ¼ÌĞøÀ­È¡Ä¿±êkv 2013-07-10 by liusan.dyf
+	 * ä»…ä»…æ˜¯è¯»å–å•ä¸ªkvçš„æ—¶å€™ï¼Œæ‰ä¼šæ ¹æ®valueçš„linkå±æ€§ç»§ç»­æ‹‰å–ç›®æ ‡kv 2013-07-10 by liusan.dyf
 	 */
 	@Override
 	public KeyValue getFinalOne(String typeCode, String key) {
 		KeyValue entry = this.getOne(typeCode, key);
 
 		if (entry != null) {
-			// Èç¹ûvalueÊÇ¡¾link:key1¡¿£¬Ôò±íÊ¾ÔÙ´Ókey1Àï¶ÁÈ¡value 2013-07-10 by liusan.dyf
+			// å¦‚æœvalueæ˜¯ã€link:key1ã€‘ï¼Œåˆ™è¡¨ç¤ºå†ä»key1é‡Œè¯»å–value 2013-07-10 by liusan.dyf
 			String value = entry.getValue();// eg link:targetKey[@targetTypeCode]
 			String prefix = "link:";
 			if (value != null && value.startsWith(prefix)) {
@@ -141,10 +141,10 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getMap(String typeCode) {
-		// ¹¹Ôì²ÎÊı
+		// æ„é€ å‚æ•°
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put(TYPE_CODE, typeCode);
-		data.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		data.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 
 		List<KeyValue> list = (List<KeyValue>) super.getListEx("getListByTypeCode", data);
 		Map<String, String> map = new HashMap<String, String>();
@@ -155,7 +155,7 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	}
 
 	/**
-	 * reservedValueÖØÖÃÎª¿Õ
+	 * reservedValueé‡ç½®ä¸ºç©º
 	 * 
 	 * @param entry
 	 */
@@ -165,7 +165,7 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	// }
 
 	/**
-	 * 2014-11-17 by ÁùÈı ÊÇ·ñÊÇºÏ·¨µÄorderBy×Ö¶Î
+	 * 2014-11-17 by å…­ä¸‰ æ˜¯å¦æ˜¯åˆæ³•çš„orderByå­—æ®µ
 	 * 
 	 * @param orderBy
 	 * @return
@@ -179,22 +179,22 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 		String orderBy = null;
 		Object z = query.get(ORDER_BY);
 		if (z != null)
-			orderBy = z.toString();// "`" + tools.StringUtil.escapeSQL(z.toString()) + "`";// 2012-04-19Ôö¼Ó·Ö½â·û
+			orderBy = z.toString();// "`" + tools.StringUtil.escapeSQL(z.toString()) + "`";// 2012-04-19å¢åŠ åˆ†è§£ç¬¦
 
 		// 2012-11-23 by liusan.dyf
 		boolean setDefaultOrderBy = false;
 		if (!tools.StringUtil.isNullOrEmpty(orderBy)) {
-			// 2013-05-22 Ôö¼ÓlastUpdateTime by liusan.dyf
-			// 2014-11-16 Ôö¼ÓreservedInt by ÁùÈı
+			// 2013-05-22 å¢åŠ lastUpdateTime by liusan.dyf
+			// 2014-11-16 å¢åŠ reservedInt by å…­ä¸‰
 			if (isValidOrderField(orderBy)) {
-				// ºÏ·¨µÄÅÅĞò×Ö¶Î
-				query.put(ORDER_BY, "`" + orderBy + "`");// Ôö¼Ó·Ö½â·û
+				// åˆæ³•çš„æ’åºå­—æ®µ
+				query.put(ORDER_BY, "`" + orderBy + "`");// å¢åŠ åˆ†è§£ç¬¦
 			} else
 				setDefaultOrderBy = true;
 		}
 
 		if (setDefaultOrderBy)
-			query.put(ORDER_BY, ID);// 2012-05-09 Ç¿ÖÆÅÅĞò£¬·ÀÖ¹×¢Èë
+			query.put(ORDER_BY, ID);// 2012-05-09 å¼ºåˆ¶æ’åºï¼Œé˜²æ­¢æ³¨å…¥
 	}
 
 	public PagedList<KeyValue> getPagedList(Map<String, Object> query, int pageIndex, int pageSize) {
@@ -220,10 +220,10 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 
 		attachOrderBy(query);
 
-		// ×¢Òâ£¬ÕâÀïµÄString£¬Èç¹ûÎªnull£¬ÔòtoStringÎª¡¾null¡¿£¬²¢²»ÊÇÎÒÃÇĞèÒªµÄ½á¹û
+		// æ³¨æ„ï¼Œè¿™é‡Œçš„Stringï¼Œå¦‚æœä¸ºnullï¼Œåˆ™toStringä¸ºã€nullã€‘ï¼Œå¹¶ä¸æ˜¯æˆ‘ä»¬éœ€è¦çš„ç»“æœ
 		// nosql 2011-11-07 19:20
 		query.put(KEYWORD, keyword == null ? "" : StringUtil.escapeSQL(keyword));
-		query.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		query.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 
 		return super.getPagedList(query, pageIndex, pageSize);
 	}
@@ -233,25 +233,25 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	public int addBatch(Collection<Object> list) {
 		if (list == null || list.size() == 0)
 			return 0;
-		// TODO ÅúÁ¿²Ù×÷ÕâÀïÒª¼ÓÇ¿
+		// TODO æ‰¹é‡æ“ä½œè¿™é‡Œè¦åŠ å¼º
 		int rtn = 0;
 		try {
 			// Collection<KeyValue> toInsert = new
 			// ArrayList<KeyValue>(list.size());
 			//
-			// // ¼ì²âÓĞÃ»ÓĞÖØ¸´µÄ
+			// // æ£€æµ‹æœ‰æ²¡æœ‰é‡å¤çš„
 			// for (KeyValue item : list) {
 			// if (getOne(item.getTypeId(), item.getKey()) == null)
 			// toInsert.add(item);
 			// }
 
-			// ¿ªÊ¼ÅúÁ¿²åÈë 2012-04-05
+			// å¼€å§‹æ‰¹é‡æ’å…¥ 2012-04-05
 
 			String statusKey = "status";
 
 			for (Object item : list) {
 				// 2012-05-26
-				// ´ÓclientÅúÁ¿Ìá½»KV£¬ÎŞ·¨ÍêÕûĞòÁĞ»¯ÎªCollection<KeyValue>£¬Ö»ÄÜÊÇCollection<Map>½á¹¹
+				// ä»clientæ‰¹é‡æäº¤KVï¼Œæ— æ³•å®Œæ•´åºåˆ—åŒ–ä¸ºCollection<KeyValue>ï¼Œåªèƒ½æ˜¯Collection<Map>ç»“æ„
 				if (item instanceof KeyValue) {
 					((KeyValue) item).setReservedValue(getKey());
 					super.insertEx("insert", item);
@@ -260,7 +260,7 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 					m.put(RESERVED_VALUE, getKey());
 
 					if (!m.containsKey(statusKey))
-						m.put(statusKey, 10);// ²¹È«Êı¾İ
+						m.put(statusKey, 10);// è¡¥å…¨æ•°æ®
 					insertEx("insert_", item);
 				}
 			}
@@ -273,13 +273,13 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 
 	@Override
 	public int deleteOne(String typeCode, String key) {
-		if (tools.Validate.isNullOrEmpty(typeCode))// typeCode ±ØĞë 2014-11-17 by ÁùÈı
+		if (tools.Validate.isNullOrEmpty(typeCode))// typeCode å¿…é¡» 2014-11-17 by å…­ä¸‰
 			return 0;
 
-		if (tools.Validate.isNullOrEmpty(key))// deleteOne Ö»ÔÊĞíÉ¾³ıÒ»¸ö 2014-11-17 by ÁùÈı
+		if (tools.Validate.isNullOrEmpty(key))// deleteOne åªå…è®¸åˆ é™¤ä¸€ä¸ª 2014-11-17 by å…­ä¸‰
 			return 0;
 
-		// ¹¹Ôì²ÎÊı
+		// æ„é€ å‚æ•°
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put(TYPE_CODE, typeCode);
 
@@ -287,7 +287,7 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 			data.put(KEY, key);
 		}
 
-		data.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		data.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 		return super.delete(data);
 	}
 
@@ -309,10 +309,10 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getKeys(String typeCode) {
-		// ¹¹Ôì²ÎÊı
+		// æ„é€ å‚æ•°
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put(TYPE_CODE, typeCode);
-		data.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		data.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 
 		// 2012-09-26 by liusan.dyf
 		return (List<String>) super.getListEx("getKeysByTypeCode", data);
@@ -335,13 +335,13 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 
 	@Override
 	public int deleteAll(String typeCode) {
-		if (tools.Validate.isNullOrEmpty(typeCode))// typeCode ±ØĞë 2014-11-17 by ÁùÈı
+		if (tools.Validate.isNullOrEmpty(typeCode))// typeCode å¿…é¡» 2014-11-17 by å…­ä¸‰
 			return 0;
 
-		// ¹¹Ôì²ÎÊı
+		// æ„é€ å‚æ•°
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put(TYPE_CODE, typeCode);
-		data.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		data.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 
 		// 2012-09-26 by liusan.dyf
 		return (Integer) super.delete("delete", data);
@@ -349,10 +349,10 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 
 	@Override
 	public KeyValue getById(long id) {
-		// ¹¹Ôì²ÎÊı
+		// æ„é€ å‚æ•°
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put(ID, id);
-		data.put(RESERVED_VALUE, getKey());// ÇĞ¼Ç
+		data.put(RESERVED_VALUE, getKey());// åˆ‡è®°
 
 		return (KeyValue) super.getObject("getById", data);
 	}

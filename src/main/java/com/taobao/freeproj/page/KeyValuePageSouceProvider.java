@@ -16,8 +16,8 @@ import com.taobao.freeproj.common.CachedKeyValueManager;
 import com.taobao.freeproj.domain.KeyValue;
 
 /**
- * ×¢ÒâÉèÖÃKeyValueDaoºÍtypeCode£¬Ä¬ÈÏµÄtypeCodeÎªpageSource<br />
- * Ä¿Ç°Ã»ÓĞ½â¾öÑ­»·ÒÀÀµµÄÎÊÌâ¡£2013-09-29
+ * æ³¨æ„è®¾ç½®KeyValueDaoå’ŒtypeCodeï¼Œé»˜è®¤çš„typeCodeä¸ºpageSource<br />
+ * ç›®å‰æ²¡æœ‰è§£å†³å¾ªç¯ä¾èµ–çš„é—®é¢˜ã€‚2013-09-29
  * 
  * @author <a href="mailto:liusan.dyf@taobao.com">liusan.dyf</a>
  * @version 1.0
@@ -25,8 +25,8 @@ import com.taobao.freeproj.domain.KeyValue;
  */
 public class KeyValuePageSouceProvider extends CachedKeyValueManager implements PageSourceProvider {
 	private static final Log logger = LogFactory.getLog("system");
-	private int flag = 0;// Îª0±íÊ¾Òª×·¼Ó×¢ÊÍ 2014-04-27
-	private String openIncludeTag = "<include>";// ÓÃ<>±ê¼Ç£¬ÒòÎª£ºÈç¹û½âÎöÊ§°Ü£¬Ò³Ãæ²»»áÏÔÊ¾Òì³£ 2014-12-09 by ÁùÈı
+	private int flag = 0;// ä¸º0è¡¨ç¤ºè¦è¿½åŠ æ³¨é‡Š 2014-04-27
+	private String openIncludeTag = "<include>";// ç”¨<>æ ‡è®°ï¼Œå› ä¸ºï¼šå¦‚æœè§£æå¤±è´¥ï¼Œé¡µé¢ä¸ä¼šæ˜¾ç¤ºå¼‚å¸¸ 2014-12-09 by å…­ä¸‰
 	private String closeIncludeTag = "</include>";
 
 	public int getFlag() {
@@ -60,7 +60,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueManager implements 
 	}
 
 	/**
-	 * CachedKeyValueManagerµÄ½Ó¿Ú
+	 * CachedKeyValueManagerçš„æ¥å£
 	 */
 	@Override
 	public String getValueFrom(KeyValue entry) {
@@ -71,47 +71,47 @@ public class KeyValuePageSouceProvider extends CachedKeyValueManager implements 
 		if (key == null)
 			key = "";
 
-		// ĞÂÔö£ºÖ»·ÖÎöÒÀÀµ£¬²»½â¾ö 2013-09-28 by liusan.dyf
+		// æ–°å¢ï¼šåªåˆ†æä¾èµ–ï¼Œä¸è§£å†³ 2013-09-28 by liusan.dyf
 		analyzeInclude(key, entry.getValue(), false);
 
-		// Èç¹ûflagÎª0±íÊ¾Òª×·¼Ó×¢ÊÍ 2013-09-28 by liusan.dyf
+		// å¦‚æœflagä¸º0è¡¨ç¤ºè¦è¿½åŠ æ³¨é‡Š 2013-09-28 by liusan.dyf
 		if (flag == 0) {
-			// Ò»Ğ©±¸×¢¡¢µ÷ÊÔĞÅÏ¢
+			// ä¸€äº›å¤‡æ³¨ã€è°ƒè¯•ä¿¡æ¯
 			String x = tools.StringUtil.LOCAL_HOST + " @ " + Convert.toString(entry.getLastUpdateTime()) + " by "
 					+ entry.getLastOperator() + ", loaded at " + tools.MySqlFunction.now();
 
-			// css¡¢jsµÈ×ÊÔ´ÎÄ¼ş 2013-03-02 by liusan.dyf
+			// cssã€jsç­‰èµ„æºæ–‡ä»¶ 2013-03-02 by liusan.dyf
 			if (key.endsWith(".js") || key.endsWith(".css"))
 				return entry.getValue() + "\r\n/* " + x + " */";
 			else
-				return entry.getValue() + "\r\n<!-- " + x + " -->";// ÆäËûhtmlµÈÒ³ÃæÎÄ¼ş
+				return entry.getValue() + "\r\n<!-- " + x + " -->";// å…¶ä»–htmlç­‰é¡µé¢æ–‡ä»¶
 		} else
 			return entry.getValue();
 	}
 
-	/*------------------------Îª½â¾öinclude¶øĞÂÔö×Ö¶ÎºÍ·½·¨ 2013-09-28 by liusan.dyf-------*/
+	/*------------------------ä¸ºè§£å†³includeè€Œæ–°å¢å­—æ®µå’Œæ–¹æ³• 2013-09-28 by liusan.dyf-------*/
 
 	private Set<String> changes = new java.util.concurrent.ConcurrentSkipListSet<String>();
-	private Map<String, Set<String>> includes = tools.MapUtil.concurrentHashMap();// ½ö½öÊÇÄ¿Ç°µÄÒÀÀµ£¬¿ÉÄÜÊÇ¹ıÆÚµÄ
+	private Map<String, Set<String>> includes = tools.MapUtil.concurrentHashMap();// ä»…ä»…æ˜¯ç›®å‰çš„ä¾èµ–ï¼Œå¯èƒ½æ˜¯è¿‡æœŸçš„
 
 	/**
-	 * Ò»¶¨ÒªÔÚÈ«²¿¼ÓÔØOKÁËÔÙÖ´ĞĞ£¬·ñÔòÓĞµÄÒÀÀµÏî»¹Ã»ÓĞ¼ÓÔØ£¬ÎŞ·¨Íê³ÉÌæ»»
+	 * ä¸€å®šè¦åœ¨å…¨éƒ¨åŠ è½½OKäº†å†æ‰§è¡Œï¼Œå¦åˆ™æœ‰çš„ä¾èµ–é¡¹è¿˜æ²¡æœ‰åŠ è½½ï¼Œæ— æ³•å®Œæˆæ›¿æ¢
 	 */
 	@Override
 	public int refreshAll() {
-		// µ÷ÓÃ¸¸Àà·½·¨
+		// è°ƒç”¨çˆ¶ç±»æ–¹æ³•
 		int i = super.refreshAll();
 
-		// È«²¿¼ÓÔØ½áÊøÁË£¬ÒªÌæ»»ÀïÃæµÄÒÀÀµ£¬½â¾öinclude
+		// å…¨éƒ¨åŠ è½½ç»“æŸäº†ï¼Œè¦æ›¿æ¢é‡Œé¢çš„ä¾èµ–ï¼Œè§£å†³include
 		Iterator<String> iterator = includes.keySet().iterator();
 
 		String key = null;
 		while (iterator.hasNext()) {
 			key = iterator.next();
 			if (includes.get(key).size() > 0) {
-				// µ±×÷µ÷ÊÔÈÕÖ¾ 2014-12-09 by ÁùÈı
+				// å½“ä½œè°ƒè¯•æ—¥å¿— 2014-12-09 by å…­ä¸‰
 				if (logger.isDebugEnabled())
-					logger.debug("¼ì²â" + key + "µÄÒÀÀµ£º" + includes.get(key));
+					logger.debug("æ£€æµ‹" + key + "çš„ä¾èµ–ï¼š" + includes.get(key));
 
 				refreshValue(key);
 			}
@@ -124,25 +124,25 @@ public class KeyValuePageSouceProvider extends CachedKeyValueManager implements 
 	public String get(String key) {
 		String value = super.get(key);
 
-		// ÓĞ¿´×Ô¼ºÊÇ·ñÓĞ±ä»¯
+		// æœ‰çœ‹è‡ªå·±æ˜¯å¦æœ‰å˜åŒ–
 		if (changes.contains(key)) {
-			Object locker = includes.get(key);// key¼¶±ğµÄËø
+			Object locker = includes.get(key);// keyçº§åˆ«çš„é”
 			if (locker != null) {
 				synchronized (locker) {
 					if (changes.contains(key)) {
 						try {
-							logger.warn("¼ì²âµ½±ä»¯£º" + key);
+							logger.warn("æ£€æµ‹åˆ°å˜åŒ–ï¼š" + key);
 							this.reload(key);
 						} finally {
-							changes.remove(key);// ¼ÓÔØOKºó£¬°Ñ±ä¸üÉ¾³ı
+							changes.remove(key);// åŠ è½½OKåï¼ŒæŠŠå˜æ›´åˆ é™¤
 						}
 					}
 				}
 
-				return get(key);// ÖØĞÂµ÷ÓÃ±¾·½·¨
+				return get(key);// é‡æ–°è°ƒç”¨æœ¬æ–¹æ³•
 			}
 
-			// Ã»ÓĞÒÀÀµ·¢Éú±ä»¯
+			// æ²¡æœ‰ä¾èµ–å‘ç”Ÿå˜åŒ–
 			return value;
 		}
 
@@ -158,71 +158,71 @@ public class KeyValuePageSouceProvider extends CachedKeyValueManager implements 
 	@Override
 	public boolean reload(String key) {
 		if (!this.isInitialized()) {
-			logger.warn("Î´³õÊ¼»¯£¬¼ÓÔØÊ§°Ü£º" + key);// 2014-04-27 by liusan.dyf
+			logger.warn("æœªåˆå§‹åŒ–ï¼ŒåŠ è½½å¤±è´¥ï¼š" + key);// 2014-04-27 by liusan.dyf
 			return false;
 		}
 
-		boolean f = super.reload(key);// ÖØĞÂ¼ÓÔØ£¬ÒòÎªrefreshAllµÄÊ±ºò¿ÉÄÜ¶ÔÖµÒÑ¾­×öÁËÌæ»»
+		boolean f = super.reload(key);// é‡æ–°åŠ è½½ï¼Œå› ä¸ºrefreshAllçš„æ—¶å€™å¯èƒ½å¯¹å€¼å·²ç»åšäº†æ›¿æ¢
 
-		refreshValue(key);// ÖØĞÂË¢ĞÂÖµ£¬½â¾öÒÀÀµ
-		markChanges(key);// ¸ÃkeyÒ²·¢ÉúÁË±ä»¯£¬¼ÌĞø±ê¼Ç
+		refreshValue(key);// é‡æ–°åˆ·æ–°å€¼ï¼Œè§£å†³ä¾èµ–
+		markChanges(key);// è¯¥keyä¹Ÿå‘ç”Ÿäº†å˜åŒ–ï¼Œç»§ç»­æ ‡è®°
 
 		return f;
 	}
 
 	private void refreshValue(String key) {
-		// ·ÖÎö²¢½â¾öÒÀÀµ
-		String value = super.get(key);// Ò»¶¨Òª´Ó¸¸Ààget£¬±¾ÀàµÄgetÊÇ»áÅĞ¶Ï±ä»¯¡¢½â¾öincludeµÄ
+		// åˆ†æå¹¶è§£å†³ä¾èµ–
+		String value = super.get(key);// ä¸€å®šè¦ä»çˆ¶ç±»getï¼Œæœ¬ç±»çš„getæ˜¯ä¼šåˆ¤æ–­å˜åŒ–ã€è§£å†³includeçš„
 		String newValue = analyzeInclude(key, value, true);
 
 		if (logger.isDebugEnabled())
-			logger.debug(key + "ĞÂvalue£º" + newValue);
+			logger.debug(key + "æ–°valueï¼š" + newValue);
 
-		// ´æ´¢ĞÂÖµ
+		// å­˜å‚¨æ–°å€¼
 		super.getCacheProvider().set(key, newValue, DEFAULT_TTL);
 	}
 
 	private void markChanges(String key) {
-		// ±éÀúÒÀÀµÊ÷£¬¿´¿´Ö¸¶¨µÄkey±»Ë­ÒÀÀµ
-		Iterator<String> iterator = includes.keySet().iterator();// Ö§³Ö²¢·¢±éÀú
+		// éå†ä¾èµ–æ ‘ï¼Œçœ‹çœ‹æŒ‡å®šçš„keyè¢«è°ä¾èµ–
+		Iterator<String> iterator = includes.keySet().iterator();// æ”¯æŒå¹¶å‘éå†
 
 		List<String> list = new ArrayList<String>();
 		String itemKey = null;
 		while (iterator.hasNext()) {
 			itemKey = iterator.next();
-			if (includes.get(itemKey).contains(key)) // ²éÕÒµ½ÁËÒÀÀµ£¬±ê¼ÇÖ®
+			if (includes.get(itemKey).contains(key)) // æŸ¥æ‰¾åˆ°äº†ä¾èµ–ï¼Œæ ‡è®°ä¹‹
 				list.add(itemKey);
 		}
 
-		if (list.size() > 0) {// 2014-12-25 17:50:56 by ÁùÈı
+		if (list.size() > 0) {// 2014-12-25 17:50:56 by å…­ä¸‰
 			changes.addAll(list);
-			logger.warn(key + "·¢ÉúÁË¸ü¸Ä£¬ÕÒµ½ÁËËüµÄÒÀÀµ²¢±ê×¢ÁË±ä»¯£º" + list);
+			logger.warn(key + "å‘ç”Ÿäº†æ›´æ”¹ï¼Œæ‰¾åˆ°äº†å®ƒçš„ä¾èµ–å¹¶æ ‡æ³¨äº†å˜åŒ–ï¼š" + list);
 		}
 	}
 
 	private String analyzeInclude(final String key, final String value, final boolean resolve) {
-		// ½â¾öincludeµÄÎÊÌâ£¬ÓĞ¿ÉÄÜÒÀÀµÏî»¹Ã»ÓĞ¼ÓÔØ£¬ÓĞ¿ÉÄÜÊÇÇ¶Ì×ÒÀÀµ 2013-09-26 by liusan.dyf
+		// è§£å†³includeçš„é—®é¢˜ï¼Œæœ‰å¯èƒ½ä¾èµ–é¡¹è¿˜æ²¡æœ‰åŠ è½½ï¼Œæœ‰å¯èƒ½æ˜¯åµŒå¥—ä¾èµ– 2013-09-26 by liusan.dyf
 
 		final Set<String> dependenceList = new HashSet<String>();
-		final String notExistsFormat = "";// "<!--{0} not exists-->";// ½öÏŞhtml£¬±ğµÄÀàĞÍ£¬»á³öÒì³£
+		final String notExistsFormat = "";// "<!--{0} not exists-->";// ä»…é™htmlï¼Œåˆ«çš„ç±»å‹ï¼Œä¼šå‡ºå¼‚å¸¸
 
-		// ½âÎöÒÀÀµ
+		// è§£æä¾èµ–
 		tools.token.GenericTokenParser p = new tools.token.GenericTokenParser(openIncludeTag, closeIncludeTag,
 				new tools.token.TokenHandler() {
 					@Override
 					public String handle(String token) {
-						// ²»ÄÜº¬ÓĞÒıºÅ<include>"/a.html"</include>
+						// ä¸èƒ½å«æœ‰å¼•å·<include>"/a.html"</include>
 						String text = tools.StringUtil.replaceAll(token, "\"", "");
-						text = tools.StringUtil.trim(text);// È¥µô¿Õ¸ñ
+						text = tools.StringUtil.trim(text);// å»æ‰ç©ºæ ¼
 
-						// Ìí¼ÓÒÀÀµ
+						// æ·»åŠ ä¾èµ–
 						dependenceList.add(text);
-						// logger.warn("¼ì²âµ½" + key + "µÄÒÀÀµ£º" + content);
+						// logger.warn("æ£€æµ‹åˆ°" + key + "çš„ä¾èµ–ï¼š" + content);
 
-						if (resolve) {// Èç¹û½â¾öinclude
+						if (resolve) {// å¦‚æœè§£å†³include
 							String value = get(text);
 							if (value == null)
-								logger.warn("²»´æÔÚµÄÒÀÀµ£º" + text);
+								logger.warn("ä¸å­˜åœ¨çš„ä¾èµ–ï¼š" + text);
 							return (value == null) ? tools.token.SimpleParser.format(notExistsFormat, text) : value;
 						}
 
@@ -230,14 +230,14 @@ public class KeyValuePageSouceProvider extends CachedKeyValueManager implements 
 					}
 				});
 
-		// ·ÖÎö
+		// åˆ†æ
 		String newValue = p.parse(value);
 
-		// ¼ÓÈëÒÀÀµ¿â£¬²¢¸²¸Ç¾ÉµÄÖµ
+		// åŠ å…¥ä¾èµ–åº“ï¼Œå¹¶è¦†ç›–æ—§çš„å€¼
 		includes.put(key, dependenceList);
 
-		if (logger.isDebugEnabled())// µ±×÷debugµÄÈÕÖ¾ 2014-12-09 by ÁùÈı
-			logger.debug((resolve ? "½â¾ö" : "·ÖÎö") + key + "µÄÒÀÀµ£º" + dependenceList);
+		if (logger.isDebugEnabled())// å½“ä½œdebugçš„æ—¥å¿— 2014-12-09 by å…­ä¸‰
+			logger.debug((resolve ? "è§£å†³" : "åˆ†æ") + key + "çš„ä¾èµ–ï¼š" + dependenceList);
 
 		return newValue;
 	}

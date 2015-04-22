@@ -1,7 +1,7 @@
 package com.taobao.freeproj.common;
 
 /**
- * Ê¹ÓÃ¾²Ì¬·½·¨£¬·½±ãÊ¹ÓÃ£¬¼ÇµÃ¸ÃÀàÒª±»spring´´½¨Ò»´Î
+ * ä½¿ç”¨é™æ€æ–¹æ³•ï¼Œæ–¹ä¾¿ä½¿ç”¨ï¼Œè®°å¾—è¯¥ç±»è¦è¢«springåˆ›å»ºä¸€æ¬¡
  * 
  * @author <a href="mailto:liusan.dyf@taobao.com">liusan.dyf</a>
  * @version 1.0

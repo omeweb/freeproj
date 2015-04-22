@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="GB2312"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap
     PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="operateLog">
 
-	<!-- 文章表SQL -->
+	<!-- 鏂囩珷琛⊿QL -->
 	<!--2012-05-21-->
    	<typeAlias alias="OperateLog" type="com.taobao.freeproj.domain.OperateLog"/>
 
   	<insert id="insert"  parameterClass="OperateLog">
-		<!--插入主表-->
+		<!--鎻掑叆涓昏〃-->
 		INSERT INTO common_operate_log
 		(`userId`,`userName`,`createTime`,`content`,`result`,`operationCode`,`system`,`ip`,`title`,`targetKey`,`revision`)
 		VALUES
@@ -19,8 +19,8 @@
     	</selectKey>
 	</insert>
 		
-	<!--2012-10-17 by liusan.dyf 增加startTime、endTime
-	2014-11-12增加strictOperationCode by 六三
+	<!--2012-10-17 by liusan.dyf 澧炲姞startTime銆乪ndTime
+	2014-11-12澧炲姞strictOperationCode by 鍏笁
 	select * from common_operate_log where operationCode = 'script.after-update' and targetKey = '5967' order by id desc limit 1;
 
 	-->

@@ -19,7 +19,7 @@ public class CounterDaoImpl extends AbstractDao<Counter> {
 
 		char[] arr = key.toCharArray();
 		for (char ch : arr) {
-			// ½ö½öÔÊĞí×ÖÄ¸¡¢_¡¢%¡¢.¡¢Êı×Ö
+			// ä»…ä»…å…è®¸å­—æ¯ã€_ã€%ã€.ã€æ•°å­—
 			if (!Character.isLetter(ch) && ch != '_' && ch != '.' && ch != '%' && !Character.isDigit(ch))
 				return false;
 		}
@@ -32,31 +32,31 @@ public class CounterDaoImpl extends AbstractDao<Counter> {
 	}
 
 	/**
-	 * Ä¿Ç°ĞŞÕıreservedValue 2013-08-14 by liusan.dyf<br />
+	 * ç›®å‰ä¿®æ­£reservedValue 2013-08-14 by liusan.dyf<br />
 	 * 
-	 * @TODO Öğ²½¿¼ÂÇ·ÏÆú 2015-4-9 20:01:08 by ÁùÈı
+	 * @TODO é€æ­¥è€ƒè™‘åºŸå¼ƒ 2015-4-9 20:01:08 by å…­ä¸‰
 	 * @param m
 	 */
 	private final void fixValueInMap(Map<String, Object> m) {
 		if (m == null)
 			return;
 
-		// Ö¸¶¨±íÃû£¬ĞŞ¸Äquery¶ÔÏó
+		// æŒ‡å®šè¡¨åï¼Œä¿®æ”¹queryå¯¹è±¡
 		String reservedKey = "reservedValue";
 		if (m != null && m.containsKey(reservedKey)) {
 			String reservedValue = tools.Convert.toString(m.get(reservedKey));
 
-			// ÑéÖ¤Ç©Ãû£¬Ê¹ÓÃmd5Ç©Ãû£¬Èç¹ûÕıÈ·£¬¾Íµ±×÷±íÃû
+			// éªŒè¯ç­¾åï¼Œä½¿ç”¨md5ç­¾åï¼Œå¦‚æœæ­£ç¡®ï¼Œå°±å½“ä½œè¡¨å
 			reservedValue = tools.StringUtil.getRawContent(reservedValue, "freeproj");
 			if (tools.Validate.isNullOrEmpty(reservedValue))
-				m.remove(reservedKey);// ²»ºÏ·¨
+				m.remove(reservedKey);// ä¸åˆæ³•
 			else
-				m.put(reservedKey, reservedValue);// Ìæ»»ÎªºÏ·¨µÄ
+				m.put(reservedKey, reservedValue);// æ›¿æ¢ä¸ºåˆæ³•çš„
 		}
 	}
 
 	/**
-	 * ÎªÁËÈÃcounter·Ö±í 2013-05-02 by liusan.dyf
+	 * ä¸ºäº†è®©counteråˆ†è¡¨ 2013-05-02 by liusan.dyf
 	 */
 	@Override
 	public PagedList<Counter> getPagedList(Map<String, Object> query, int pageIndex, int pageSize) {
@@ -65,13 +65,13 @@ public class CounterDaoImpl extends AbstractDao<Counter> {
 		return super.getPagedList(query, pageIndex, pageSize);
 	}
 
-	/************ Ê±¼ä´Á 2012-08-10 ****************/
+	/************ æ—¶é—´æˆ³ 2012-08-10 ****************/
 
 	public void insertTimestampList(List<Timestamp> list) {
 		Session session = super.openSession(true, 0, false);
 		try {
-			// ÅúÁ¿²åÈë
-			// TODO ibatisºÍmybatisµÄÊµÏÖ£¬ÕâÀï»á²»Í¬
+			// æ‰¹é‡æ’å…¥
+			// TODO ibatiså’Œmybatisçš„å®ç°ï¼Œè¿™é‡Œä¼šä¸åŒ
 
 			for (Timestamp item : list) {
 				session.insert("insertTimestamp", item);
@@ -84,7 +84,7 @@ public class CounterDaoImpl extends AbstractDao<Counter> {
 	}
 
 	public void insertTimestamp(long start, long end) {
-		// °´·ÖÖÓ¶ÔÆë
+		// æŒ‰åˆ†é’Ÿå¯¹é½
 		long m = start % (60 * 1);
 		start = start - m;
 
@@ -124,7 +124,7 @@ public class CounterDaoImpl extends AbstractDao<Counter> {
 			}
 		}// end for
 
-		// Ê£ÏÂµÄÒ²Òª²åÈë
+		// å‰©ä¸‹çš„ä¹Ÿè¦æ’å…¥
 		insertTimestampList(list);
 	}
 

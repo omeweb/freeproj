@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="GB2312"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap
     PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
-<!-- ÏÄÀ× --> 
+<!-- å¤é›· --> 
 <sqlMap namespace="counter">
     <typeAlias alias="Counter" type="com.taobao.freeproj.domain.Counter" />
     <typeAlias alias="Timestamp" type="com.taobao.freeproj.domain.Timestamp" />
@@ -16,7 +16,7 @@
 		<result property="lastUpdateTime" column="lastUpdateTime" />
 	</resultMap>
 
-	<!--2012-05-24 Ôö¼Ócomment by liusan.dyf-->
+	<!--2012-05-24 å¢žåŠ comment by liusan.dyf-->
 	<insert id="insert" parameterClass="Counter">
  		INSERT INTO common_counter (`key_`,`value`,`timestamp`,`comment`) VALUES (#key#,#value#,#timestamp#,#comment#)
 		ON DUPLICATE KEY UPDATE `value`=`value`+ #value#,`lastUpdateTime`=now()
@@ -47,14 +47,14 @@
 			#second#);
 	</insert>
 	
-	<!--2012-12-26 Ôö¼ÓmaxValue¡¢minValue-->
+	<!--2012-12-26 å¢žåŠ maxValueã€minValue-->
 	<sql id="queryWhereClause">
 		<dynamic>
 			<isNotEmpty property="key">
 				and `key_` like CONCAT(#key#,'%')
 			</isNotEmpty>
 			
-			<isNotEmpty property="fullKey"><!--°´ÕÕkeyÀ´ËÑË÷£¬²»Ä£Ê½Æ¥Åä 2013-05-02 by liusan.dyf-->
+			<isNotEmpty property="fullKey"><!--æŒ‰ç…§keyæ¥æœç´¢ï¼Œä¸æ¨¡å¼åŒ¹é… 2013-05-02 by liusan.dyf-->
 				and `key_` = #fullKey#
 			</isNotEmpty>
 			
@@ -91,19 +91,19 @@
 	
 	<sql id="tableClause">
 		<dynamic>
-			<isNotEmpty property="reservedValue"><!--ÕâÀïÒªÊ¹ÓÃ°×Ãûµ¥¹ýÂË£¬·ÀÖ¹sql×¢Èë 2013-05-02 by liusan.dyf-->
+			<isNotEmpty property="reservedValue"><!--è¿™é‡Œè¦ä½¿ç”¨ç™½åå•è¿‡æ»¤ï¼Œé˜²æ­¢sqlæ³¨å…¥ 2013-05-02 by liusan.dyf-->
 				`$reservedValue$` 
 			</isNotEmpty>
 			
-			<isEmpty property="reservedValue"><!--Ä¬ÈÏ±í£¬Îªcommon_counter-->
+			<isEmpty property="reservedValue"><!--é»˜è®¤è¡¨ï¼Œä¸ºcommon_counter-->
 				`common_counter` 
 			</isEmpty>
 		</dynamic>
 	</sql>
 
 	<!-- 2012-05-25 by wuchen.lx 
-	2012-10-09 Ôö¼ÓstartTimestamp¡¢endTimestamp by liusan.dyf
-	2013-05-02 Ôö¼ÓÁË¶Ô±íµÄÅÐ¶Ï£¬Èç¹ûreservedValue²»Îª¿Õ£¬¾ÍÓÃreservedValueÀïµÄ±íÃû by liusan.dyf
+	2012-10-09 å¢žåŠ startTimestampã€endTimestamp by liusan.dyf
+	2013-05-02 å¢žåŠ äº†å¯¹è¡¨çš„åˆ¤æ–­ï¼Œå¦‚æžœreservedValueä¸ä¸ºç©ºï¼Œå°±ç”¨reservedValueé‡Œçš„è¡¨å by liusan.dyf
 	-->
 	<select id="getPagedList" resultMap="defaultMap" parameterClass="hashmap">
 		SELECT * FROM 
@@ -112,7 +112,7 @@
 		<include refid="queryWhereClause" />
 		order by 
 		
-		<!--2013-05-02 by liusan.dyf£¬ÕâÀïµÄÅÅÐòÒ»ÂÉÊÇµ¹Ðò-->
+		<!--2013-05-02 by liusan.dyfï¼Œè¿™é‡Œçš„æŽ’åºä¸€å¾‹æ˜¯å€’åº-->
 		<dynamic>
 			<isEqual property="orderBy" compareValue="id">
  				id desc
@@ -126,7 +126,7 @@
  				`lastUpdateTime` desc
  			</isEqual>
 			
-			<isEmpty property="orderBy"><!--Ä¬ÈÏ°´ÕÕidÀ´ÅÅÐò 2013-05-03 by liusan.dyf-->
+			<isEmpty property="orderBy"><!--é»˜è®¤æŒ‰ç…§idæ¥æŽ’åº 2013-05-03 by liusan.dyf-->
  				id desc
  			</isEmpty>
 		</dynamic>

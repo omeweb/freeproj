@@ -5,7 +5,7 @@
 	<!--2012-03-06 by liusan.dyf SpringBeanUtil -->
 	<bean class="tools.SpringContext" />
 
-	<!-- Êý¾ÝÔ´ÅäÖÃ,ÔÚ²âÊÔ»·¾³Ê¹ÓÃµ¥Á¬½Ó -->
+	<!-- æ•°æ®æºé…ç½®,åœ¨æµ‹è¯•çŽ¯å¢ƒä½¿ç”¨å•è¿žæŽ¥ -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.sqlite.JDBC" />
@@ -14,7 +14,7 @@
 		<property name="password" value="" />
 	</bean>
 
-	<!--SessionFactory£¬¿ÉÒÔ¹«ÓÃ -->
+	<!--SessionFactoryï¼Œå¯ä»¥å…¬ç”¨ -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="typeAliasesPackage" value="com.taobao.freeproj.domain" />
@@ -28,7 +28,7 @@
 		</property>
 	</bean>
 
-	<!-- ÅäÖÃ 2015-4-8 17:08:46 by ÁùÈý -->
+	<!-- é…ç½® 2015-4-8 17:08:46 by å…­ä¸‰ -->
 	<bean class="com.taobao.freeproj.orm.Configuration" init-method="init">
 		<!-- eventContainer -->
 		<property name="eventContainer">

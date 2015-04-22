@@ -3,22 +3,22 @@ package com.taobao.freeproj.common;
 public interface Constant {
 
 	/**
-	 * ะวบล
+	 * รรยบร…
 	 */
 	public static final String POUND = "#";
 
 	/**
-	 * รฐบล
+	 * รยฐยบร…
 	 */
 	public static final String COLON = ":";
 
 	/**
-	 * ตใบล
+	 * ยตรฃยบร…
 	 */
 	public static final String DOT = ".";
 
 	/**
-	 * ถบบล
+	 * ยถยบยบร…
 	 */
 	public static final String COMMA = ",";
 

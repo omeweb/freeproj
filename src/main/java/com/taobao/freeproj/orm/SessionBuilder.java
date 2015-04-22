@@ -1,16 +1,16 @@
 package com.taobao.freeproj.orm;
 
 /**
- * ÓÃÀ´´´½¨Orm Session£¬Ò»¸öbuilder¶ÔÓ¦Ò»¸öconnection£¬ËùÒÔÕâÀï²»ÔÙÍĞ¹ÜÊı¾İ¿âÁ¬½Ó¶ÔÏó
+ * ç”¨æ¥åˆ›å»ºOrm Sessionï¼Œä¸€ä¸ªbuilderå¯¹åº”ä¸€ä¸ªconnectionï¼Œæ‰€ä»¥è¿™é‡Œä¸å†æ‰˜ç®¡æ•°æ®åº“è¿æ¥å¯¹è±¡
  * 
  * @author <a href="mailto:liusan.dyf@taobao.com">liusan.dyf</a>
  * @version 1.0
- * @since 2015Äê4ÔÂ7ÈÕ
+ * @since 2015å¹´4æœˆ7æ—¥
  */
 public interface SessionBuilder {
 	/**
 	 * @param batch
-	 * @param tx Ä¬ÈÏÎª0
+	 * @param tx é»˜è®¤ä¸º0
 	 * @param autoCommit
 	 * @return
 	 */

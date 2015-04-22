@@ -3,8 +3,8 @@ package com.taobao.freeproj.domain;
 import java.util.Date;
 
 /**
- * 2012-09-26Ôö¼ÓlastUpdateTime¡¢creator£¬2012-09-27Ôö¼ÓlastOperator <br />
- * 2012-09-28Ôö¼ÓreservedString¡¢reservedInt
+ * 2012-09-26å¢åŠ lastUpdateTimeã€creatorï¼Œ2012-09-27å¢åŠ lastOperator <br />
+ * 2012-09-28å¢åŠ reservedStringã€reservedInt
  * 
  * @author liusan.dyf
  */
@@ -35,7 +35,7 @@ public class KeyValue {
 	private int reservedInt;
 
 	/**
-	 * 2014-11-17 by ÁùÈı£¬×¢ÒâÀàĞÍÎªInteger£¬sortNumber¿ÉÄÜÎªnull
+	 * 2014-11-17 by å…­ä¸‰ï¼Œæ³¨æ„ç±»å‹ä¸ºIntegerï¼ŒsortNumberå¯èƒ½ä¸ºnull
 	 */
 	private int sortNumber;
 
@@ -141,7 +141,7 @@ public class KeyValue {
 
 	public void setSortNumber(Integer sortNumber) {
 		if (sortNumber == null)
-			return;// 2014-11-17 by ÁùÈı
+			return;// 2014-11-17 by å…­ä¸‰
 		this.sortNumber = sortNumber;
 	}
 }

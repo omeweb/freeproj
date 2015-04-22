@@ -8,11 +8,11 @@ import org.apache.ibatis.session.SqlSession;
 import com.taobao.freeproj.orm.Session;
 
 /**
- * °ÑmybatisµÄsession¶ÔÏó×ª»»ÎªormµÄsession¶ÔÏó
+ * æŠŠmybatisçš„sessionå¯¹è±¡è½¬æ¢ä¸ºormçš„sessionå¯¹è±¡
  * 
  * @author <a href="mailto:liusan.dyf@taobao.com">liusan.dyf</a>
  * @version 1.0
- * @since 2015Äê4ÔÂ7ÈÕ
+ * @since 2015å¹´4æœˆ7æ—¥
  */
 public class MybatisSession implements Session {
 
@@ -23,7 +23,7 @@ public class MybatisSession implements Session {
 
 	public MybatisSession(SqlSession v, boolean batch, int tx, boolean autoCommit) {
 		if (v == null)
-			throw new IllegalArgumentException("SqlSession²»ÄÜÎª¿Õ");
+			throw new IllegalArgumentException("SqlSessionä¸èƒ½ä¸ºç©º");
 
 		raw = v;
 		this.batch = batch;

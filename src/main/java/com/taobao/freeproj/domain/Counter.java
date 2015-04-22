@@ -3,8 +3,8 @@ package com.taobao.freeproj.domain;
 import java.util.Date;
 
 /**
- * 2012-02-15 by liusan.dyf£¬ÓÃÓÚ¼ÆÊıÆ÷Í³¼Æ<br />
- * Ôö¼ÓreservedValue 2013-04-28 by liusan.dyf
+ * 2012-02-15 by liusan.dyfï¼Œç”¨äºè®¡æ•°å™¨ç»Ÿè®¡<br />
+ * å¢åŠ reservedValue 2013-04-28 by liusan.dyf
  * 
  * @author liusan.dyf
  */
@@ -13,12 +13,12 @@ public class Counter {
 	private long value;
 	private long timestamp;
 	/**
-	 * Ò»Ğ©¶ÔkeyµÄ±¸×¢ĞÅÏ¢ 2012-05-24 by liusan.dyf
+	 * ä¸€äº›å¯¹keyçš„å¤‡æ³¨ä¿¡æ¯ 2012-05-24 by liusan.dyf
 	 */
 	private String comment;
 
 	/**
-	 * ×îºó¸üĞÂÊ±¼ä 2012-05-24 by liusan.dyf
+	 * æœ€åæ›´æ–°æ—¶é—´ 2012-05-24 by liusan.dyf
 	 */
 	private Date lastUpdateTime;
 

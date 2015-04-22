@@ -13,13 +13,13 @@ public class Configuration extends tools.InitializeOnce {
 
 	public static Configuration instance() {
 		if (instance == null)
-			throw new IllegalArgumentException("instance²»ÄÜÎªnull£¬Çë¼ì²éÅäÖÃ");
+			throw new IllegalArgumentException("instanceä¸èƒ½ä¸ºnullï¼Œè¯·æ£€æŸ¥é…ç½®");
 
 		return instance;
 	}
 
 	/**
-	 * ¾²Ì¬·½·¨£¬Ìá¹©½Ó¿ÚÈÃÍâ²¿¿ÉÒÔÌæ»»
+	 * é™æ€æ–¹æ³•ï¼Œæä¾›æ¥å£è®©å¤–éƒ¨å¯ä»¥æ›¿æ¢
 	 * 
 	 * @param v
 	 */
@@ -37,25 +37,25 @@ public class Configuration extends tools.InitializeOnce {
 	 */
 	public Session getSession(String key, String route, boolean batch, int tx, boolean autoCommit) {
 		if (builderMap == null)
-			throw new IllegalArgumentException("builderMap²»ÄÜÎªnull");
+			throw new IllegalArgumentException("builderMapä¸èƒ½ä¸ºnull");
 
-		// ÏÈÈ¡ÌØÊâ¶¨ÒåµÄ
+		// å…ˆå–ç‰¹æ®Šå®šä¹‰çš„
 		SessionBuilder rtn = builderMap.get(key + ":" + route);
 		if (rtn != null)
 			return rtn.build(batch, tx, autoCommit);
 
-		// ÔÙÈ¡Í¨ÓÃµÄ
+		// å†å–é€šç”¨çš„
 		return builderMap.get("*").build(batch, tx, autoCommit);
 	}
 
 	public void onEvent(Object sender, EventArgs args) {
-		// ×¢Òâ£¬ÕâÀïÒªÑÏ·ÀËÀÑ­»· 2013-07-19 by liusan.dyf
+		// æ³¨æ„ï¼Œè¿™é‡Œè¦ä¸¥é˜²æ­»å¾ªç¯ 2013-07-19 by liusan.dyf
 
 		// String ns = getNamespace().toLowerCase();
 		// if ("operatelog".equals(ns) || "revision".equals(ns) || ns.indexOf("counter") > -1)// 2012-09-19
 		// return;
 
-		// ÕâÀïÊ¹ÓÃ¾²Ì¬·½·¨»ñÈ¡£¬ÎªÁË·ÀÖ¹ÔÚÃ¿¸ö×ÓÀàÀï¶¼set£¬¼õÉÙ·±Ëö 2013-12-16 by liusan.dyf
+		// è¿™é‡Œä½¿ç”¨é™æ€æ–¹æ³•è·å–ï¼Œä¸ºäº†é˜²æ­¢åœ¨æ¯ä¸ªå­ç±»é‡Œéƒ½setï¼Œå‡å°‘ç¹ç 2013-12-16 by liusan.dyf
 		if (eventContainer != null)
 			eventContainer.onEvent(sender, args);
 	}

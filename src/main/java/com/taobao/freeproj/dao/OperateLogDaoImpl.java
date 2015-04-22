@@ -7,7 +7,7 @@ import com.taobao.freeproj.orm.AbstractDao;
 
 public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	/**
-	 * ÏµÍ³±àºÅ
+	 * ç³»ç»Ÿç¼–å·
 	 */
 	private int systemId = 100;
 
@@ -23,11 +23,11 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	/**
 	 * 2012-05-24 by liusan.dyf
 	 * 
-	 * @param title eg ĞŞ¸ÄÁËÎÄÕÂ¡¶ÌÔ±¦¹æÔò¡·
-	 * @param content eg ÎÄÕÂÄÚÈİ
+	 * @param title eg ä¿®æ”¹äº†æ–‡ç« ã€Šæ·˜å®è§„åˆ™ã€‹
+	 * @param content eg æ–‡ç« å†…å®¹
 	 * @param code eg catalog.after-add
-	 * @param targetKey eg ÎÄÕÂid£¬±ÈÈç12345
-	 * @param result ²Ù×÷µÄ½á¹û
+	 * @param targetKey eg æ–‡ç« idï¼Œæ¯”å¦‚12345
+	 * @param result æ“ä½œçš„ç»“æœ
 	 * @param r
 	 */
 	public void add(String title, String content, String code, String targetKey, Object result, int r) {
@@ -44,10 +44,10 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 		if (result != null)
 			entry.setResult(result.toString());
 
-		// ×·¼ÓÊı¾İ
+		// è¿½åŠ æ•°æ®
 		tools.User u = Global.getCurrentUser();
 		if (u != null) {
-			// ¿ÉÒÔ×ª»»¡¾"057526"¡¿ÕâÑùµÄÇé¿ö 2014-05-17 by liusan.dyf
+			// å¯ä»¥è½¬æ¢ã€"057526"ã€‘è¿™æ ·çš„æƒ…å†µ 2014-05-17 by liusan.dyf
 			entry.setUserId(tools.Convert.toLong(u.getId(), 0));
 			entry.setUserName(u.getName());
 
@@ -61,7 +61,7 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 		entry.setId(id);
 
 		// // 2013-07-16 by liusan.dyf
-		// // ÌØÊâµÄ»Øµ÷£¬Ò»°ãÈÕÖ¾ÊÇ²»×Ô¶¯Ö´ĞĞhook»Øµ÷µÄ£¬·ÀÖ¹ËÀÑ­»·
+		// // ç‰¹æ®Šçš„å›è°ƒï¼Œä¸€èˆ¬æ—¥å¿—æ˜¯ä¸è‡ªåŠ¨æ‰§è¡Œhookå›è°ƒçš„ï¼Œé˜²æ­¢æ­»å¾ªç¯
 		// if (getEventHandler() != null) {
 		// EventArgs args = EventArgs.create(entry).setType("operateLog.after-insert");
 		// getEventHandler().onEvent(null, args);
