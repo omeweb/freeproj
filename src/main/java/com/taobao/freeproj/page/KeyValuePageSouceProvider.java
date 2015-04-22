@@ -1,5 +1,6 @@
 package com.taobao.freeproj.page;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,6 +15,8 @@ import tools.Convert;
 
 import com.taobao.freeproj.common.CachedKeyValueManager;
 import com.taobao.freeproj.domain.KeyValue;
+
+import javax.servlet.http.*;
 
 /**
  * 注意设置KeyValueDao和typeCode，默认的typeCode为pageSource<br />
@@ -118,6 +121,37 @@ public class KeyValuePageSouceProvider extends CachedKeyValueManager implements 
 		}
 
 		return i;
+	}
+
+	/**
+	 * 2015-4-22 21:15:11 by liusan.dyf
+	 * 
+	 * @param url
+	 * @param charset
+	 * @param httpResponse
+	 * @return
+	 * @throws IOException
+	 */
+	@Override
+	public boolean output(String url, String charset, HttpServletResponse httpResponse) throws IOException {
+		if (url == null)
+			return false;
+
+		String v = this.get(url);
+
+		if (v != null) {
+			if (url.endsWith(".js")) // 一些js我们也放到缓存里去，方便部署和发布 2013-02-28
+				httpResponse.addHeader("Content-Type", "application/x-javascript;charset=" + charset);
+			else if (url.endsWith(".css")) // 2013-04-19 by liusan.dyf
+				httpResponse.addHeader("Content-Type", "text/css; charset=" + charset);
+			else if (url.endsWith(".htm") || url.endsWith(".html") || url.endsWith("/"))
+				httpResponse.addHeader("Content-Type", "text/html; charset=" + charset);
+
+			httpResponse.getWriter().write(v);
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

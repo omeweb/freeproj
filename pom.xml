@@ -128,6 +128,13 @@
 		  <version>1.2.2</version>
 		</dependency>
 		
+		<!--2015-4-22 21:11:40 by liusan.dyf page provider-->
+		<dependency>
+		  <groupId>javax.servlet</groupId>
+		  <artifactId>servlet-api</artifactId>
+		  <version>2.5</version>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>
@@ -138,6 +145,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<encoding>utf-8</encoding>
 				</configuration>
 			</plugin>
 		</plugins>
