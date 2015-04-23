@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="gb2312"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 
 	<!--2012-03-06 by liusan.dyf SpringBeanUtil -->
 	<bean class="tools.SpringContext" />
 
-	<!-- 数据源配置,在测试环境使用单连接 -->
+	<!-- �版�婧��缃��ㄦ�璇��澧�娇�ㄥ�杩�� -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.sqlite.JDBC" />
@@ -14,33 +14,33 @@
 		<property name="password" value="" />
 	</bean>
 
-	<!--SessionFactory，可以公用 -->
+	<!--SessionFactory锛��浠ュ���-->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="typeAliasesPackage" value="com.taobao.freeproj.domain" />
+		<property name="typeAliasesPackage" value="com.underline.freeproj.domain" />
 		<property name="mapperLocations" value="classpath*:mybatis-sqlmap/*.xml" />
 	</bean>
 
 	<!--SqlMapClientManager 2012-08-03 by liusan.dyf -->
-	<bean id="sessionBuilder" class="com.taobao.freeproj.orm.mybatis.MybatisSessionBuilder">
+	<bean id="sessionBuilder" class="com.underline.freeproj.orm.mybatis.MybatisSessionBuilder">
 		<property name="factory">
 			<ref bean="sqlSessionFactory" />
 		</property>
 	</bean>
 
-	<!-- 配置 2015-4-8 17:08:46 by 六三 -->
-	<bean class="com.taobao.freeproj.orm.Configuration" init-method="init">
+	<!-- ��疆 2015-4-8 17:08:46 by ��� -->
+	<bean class="com.underline.freeproj.orm.Configuration" init-method="init">
 		<!-- eventContainer -->
 		<property name="eventContainer">
 			<bean class="tools.event.EventContainer">
-				<property name="eventHandlers">
+				<property name="handlers">
 					<map>
 						<entry>
 							<key>
 								<value>*</value>
 							</key>
 							<list>
-								<bean class="com.taobao.freeproj.test.DefaultEventHandler" />
+								<bean class="com.underline.freeproj.test.DefaultEventHandler" />
 							</list>
 						</entry>
 					</map>
