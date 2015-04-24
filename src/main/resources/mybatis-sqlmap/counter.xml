@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- 夏雷 --> 
+<mapper namespace="counter">
+
+	<!--2012-05-24 增加comment by liusan.dyf-->
+	<insert id="insert" parameterType="Counter">
+ 		INSERT INTO common_counter (`key_`,`value`,`timestamp`,`comment`) VALUES (#{key},#{value},#{timestamp},#{comment})
+		ON DUPLICATE KEY UPDATE `value`=`value`+ #{value},`lastUpdateTime`=now()
+		<!--2013-09-10 by liusan.dyf-->
+			<if test="comment != null">
+				,`comment` = #{comment} 
+			</if>	
+	</insert>
+	
+	<!--2012-02-29 by liusan.dyf-->
+	<insert id="insertTimestamp" parameterType="Timestamp">
+ 		INSERT INTO `common_timestamp`
+            (`timestamp`,
+             `year`,
+             `month`,
+             `day`,
+             `hour`,
+             `minute`,
+             `second`)
+ 		VALUES (#{timestamp},
+			#{year},
+			#{month},
+			#{day},
+			#{hour},
+			#{minute},
+			#{second});
+	</insert>
+	
+	<!--2012-12-26 增加maxValue、minValue-->
+	<sql id="queryWhereClause">
+			<if test="key != null">
+				and `key_` like CONCAT(#{key},'%')
+			</if>
+			
+			<if test="fullKey != null"><!--按照key来搜索，不模式匹配 2013-05-02 by liusan.dyf-->
+				and `key_` = #{fullKey}
+			</if>
+			
+			<if test="startTimestamp != null">
+				and `timestamp` >= #{startTimestamp}
+			</if>
+			
+			<if test="endTimestamp != null">
+				and `timestamp` &lt;= #{endTimestamp}
+			</if>
+			
+			<if test="maxValue != null">
+				and `value` &lt;= #{maxValue}
+			</if>
+			
+			<if test="minValue != null">
+				and `value` >= #{minValue}
+			</if>
+			
+			<!--  2013-04-28 add lastUpdateTime by sihai.hush -->
+			<if test="lastUpdateTime != null">
+				and `lastUpdateTime` = #{lastUpdateTime}
+			</if>
+			
+			<if test="startLastUpdateTime != null">
+				and `lastUpdateTime` >= #{startLastUpdateTime}
+			</if>
+			
+			<if test="endLastUpdateTime != null">
+				and `lastUpdateTime` &lt;= #{endLastUpdateTime}
+			</if>
+	</sql>
+	
+	<sql id="tableClause">
+			<if test="reservedValue != null"><!--这里要使用白名单过滤，防止sql注入 2013-05-02 by liusan.dyf-->
+				`${reservedValue}` 
+			</if>
+			
+			<if test="reservedValue == null"><!--默认表，为common_counter-->
+				`common_counter` 
+			</if>
+	</sql>
+
+	<!-- 2012-05-25 by wuchen.lx 
+	2012-10-09 增加startTimestamp、endTimestamp by liusan.dyf
+	2013-05-02 增加了对表的判断，如果reservedValue不为空，就用reservedValue里的表名 by liusan.dyf
+	-->
+	<select id="getPagedList" resultType="Counter" parameterType="hashmap">
+		SELECT `key_` as `key`,`value`,`timestamp`,`comment`,`lastUpdateTime` FROM 
+		<include refid="tableClause" />
+		where 1 = 1
+		<include refid="queryWhereClause" />
+		order by 
+		
+		<!--2013-05-02 by liusan.dyf，这里的排序一律是倒序-->
+
+		<!--写法参见：http://cheng-xinwei.iteye.com/blog/2008200 2015-4-20 19:36:00 by 六三
+		或者  <if test="gender != null and gender != \\'\\'">
+		-->
+			<if test='orderBy == "id"'>
+ 				id desc
+ 			</if>
+			
+			<if test='orderBy == "timestamp"'>
+ 				`timestamp` desc
+ 			</if>
+			
+			<if test='orderBy == "lastUpdateTime"'>
+ 				`lastUpdateTime` desc
+ 			</if>
+			
+			<if test="orderBy == null"><!--默认按照id来排序 2013-05-03 by liusan.dyf-->
+ 				id desc
+ 			</if>
+		limit #{skip},#{limit};
+	</select>
+	
+	<select id="getCount" resultType="int" parameterType="hashmap">
+		SELECT count(0) FROM 
+		<include refid="tableClause" />
+		where 1 = 1
+		<include refid="queryWhereClause" />
+		;
+	</select>
+	
+</mapper>

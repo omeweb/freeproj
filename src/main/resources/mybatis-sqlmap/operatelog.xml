@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<mapper namespace="operateLog">
+
+  	<insert id="insert"  parameterType="OperateLog">
+		<!--插入主表-->
+		INSERT INTO common_operate_log
+		(`userId`,`userName`,`title`,`content`,`result`,`operationCode`,`system`,`ip`,`targetKey`,`revision`)
+		VALUES(#{userId},#{userName},#{title},#{content},#{result},#{operationCode},#{system},#{ip},#{targetKey},#{revision});
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+      		select LAST_INSERT_ID() as value
+    	</selectKey>
+	</insert>
+		
+	<!--2012-10-17 by liusan.dyf 增加startTime、endTime
+	2014-11-12增加strictOperationCode by 六三
+	select * from common_operate_log where operationCode = 'script.after-update' and targetKey = '5967' order by id desc limit 1;
+
+	-->
+	<sql id="selectClause">		
+		<if test="idList != null"> 
+		and id in 
+		<foreach item="item" index="index" collection="idList"  open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	  </if>
+		
+		<if test="id != null"> and `id`=#{id} </if>
+		<if test="userId != null and userId != 0"> and `userId`=#{userId} </if>
+		<if test="userName != null"> and `userName`=#{userName} </if>
+		<if test="title != null"> and `title`=#{title} </if>
+		<if test="content != null"> and `content`=#{content} </if>
+		<if test="result != null"> and `result`=#{result} </if>
+		<if test="strictOperationCode != null"> and `operationCode`=#{strictOperationCode} </if>
+		<if test="operationCode != null"> and `operationCode` like CONCAT(#{operationCode},'%') </if>
+		<if test="system != null and system != 0"> and `system`=#{system} </if>
+		<if test="ip != null"> and `ip`=#{ip} </if>
+		<if test="targetKey != null"> and `targetKey`=#{targetKey} </if>
+		<if test="revision != null and revision != 0"> and `revision`=#{revision} </if>
+		
+		<if test="startTime != null"> and `createTime`>=#{startTime} </if>
+		<if test="endTime != null"> and `createTime` &lt;= #{endTime} </if>		
+	</sql>
+
+	<select id="getPagedList" resultType="OperateLog" parameterType="hashmap">
+		SELECT `id`,`userId`,`userName`,`createTime`,
+		<if test="noContent != null">
+			null as 
+		</if>
+		`content`,		
+		`result`,`operationCode`,`system`,`ip`,`title`,`targetKey`,`revision`
+		FROM `common_operate_log` where 1 = 1
+		<include refid="selectClause"/>
+		order by `id` desc
+		limit #{skip},#{limit};
+	</select>
+	
+	<select id="getCount" resultType="int" parameterType="hashmap">
+		SELECT count(0) FROM `common_operate_log` where 1 = 1
+		<include refid="selectClause"/>
+		;
+	</select>
+</mapper>
