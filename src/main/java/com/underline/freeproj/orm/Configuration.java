@@ -13,7 +13,7 @@ public class Configuration extends tools.InitializeOnce {
 
 	public static Configuration instance() {
 		if (instance == null)
-			throw new IllegalArgumentException("instance不能为null，请检查配置");
+			throw new IllegalArgumentException("Configuration instance不能为null，请检查配置");
 
 		return instance;
 	}
