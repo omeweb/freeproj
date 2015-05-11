@@ -8,12 +8,11 @@ import org.junit.Test;
 
 import tools.PagedList;
 
-import com.underline.freeproj.common.SpringBeanUtil;
 import com.underline.freeproj.dao.OperateLogDaoImpl;
 import com.underline.freeproj.domain.OperateLog;
 
 public class OperateLogTest extends BaseTest {
-	OperateLogDaoImpl dao = SpringBeanUtil.getBean(OperateLogDaoImpl.class, "operateLogDao");
+	OperateLogDaoImpl dao = tools.spring.SpringContext.getBean(OperateLogDaoImpl.class, "operateLogDao");
 
 	OperateLog entry = new OperateLog();
 

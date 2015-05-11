@@ -7,12 +7,11 @@ import org.junit.Test;
 
 import tools.PagedList;
 
-import com.underline.freeproj.common.SpringBeanUtil;
 import com.underline.freeproj.dao.KeyValueDao;
 import com.underline.freeproj.domain.KeyValue;
 
 public class KeyValueTest extends BaseTest {
-	KeyValueDao dao = SpringBeanUtil.getBean(KeyValueDao.class, "keyValueDao");
+	KeyValueDao dao = tools.spring.SpringContext.getBean(KeyValueDao.class, "keyValueDao");
 
 	@Test
 	public void getListTest() {

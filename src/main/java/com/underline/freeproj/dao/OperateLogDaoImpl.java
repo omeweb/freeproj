@@ -21,6 +21,59 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	}
 
 	/**
+	 * 简化版的添加日志，title和content都不是必须的，2015-5-10 14:56:07 by liusan.dyf
+	 * 
+	 * @param userId
+	 * @param userName
+	 * @param code
+	 * @param targetKey
+	 * @param result
+	 * @param ip
+	 */
+	public void addSimple(long userId, String userName, String code, String targetKey, Object result, String ip) {
+		OperateLog entry = new OperateLog();
+		entry.setOperationCode(code);
+		entry.setTargetKey(targetKey);
+
+		entry.setSystem(systemId);
+		entry.setIp(ip);
+
+		entry.setUserId(userId);
+		entry.setUserName(userName);
+
+		if (result != null)
+			entry.setResult(result.toString());
+
+		fixEntry(entry);
+
+		add(entry);
+	}
+
+	private void fixEntry(OperateLog entry) {
+		// 追加数据
+		tools.User u = Global.getCurrentUser();
+		if (u != null) {
+			// 可以转换【"057526"】这样的情况 2014-05-17 by liusan.dyf
+			long userId = tools.Convert.toLong(u.getId(), 0);
+			String userName = u.getName();
+
+			// ip
+			String ip = tools.Convert.toString(u.getExtra().get("ip"));
+
+			if (entry.getUserId() == 0)
+				entry.setUserId(userId);
+
+			if (tools.Validate.isNullOrEmpty(entry.getUserName())) {
+				entry.setUserName(userName);
+			}
+
+			if (tools.Validate.isNullOrEmpty(entry.getIp())) {
+				entry.setIp(ip);
+			}
+		}
+	}
+
+	/**
 	 * 2012-05-24 by liusan.dyf
 	 * 
 	 * @param title eg 修改了文章《淘宝规则》
@@ -45,17 +98,7 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 			entry.setResult(result.toString());
 
 		// 追加数据
-		tools.User u = Global.getCurrentUser();
-		if (u != null) {
-			// 可以转换【"057526"】这样的情况 2014-05-17 by liusan.dyf
-			entry.setUserId(tools.Convert.toLong(u.getId(), 0));
-			entry.setUserName(u.getName());
-
-			// ip
-			Object ip = u.getExtra().get("ip");
-			if (ip != null)
-				entry.setIp(ip.toString());
-		}
+		fixEntry(entry);
 
 		int id = add(entry);
 		entry.setId(id);

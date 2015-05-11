@@ -8,13 +8,12 @@ import org.junit.Test;
 
 import tools.PagedList;
 
-import com.underline.freeproj.common.SpringBeanUtil;
 import com.underline.freeproj.dao.CounterDaoImpl;
 import com.underline.freeproj.domain.Counter;
 
 public class CounterTest extends BaseTest {
 
-	CounterDaoImpl dao = SpringBeanUtil.getBean(CounterDaoImpl.class, "counterDao");
+	CounterDaoImpl dao = tools.spring.SpringContext.getBean(CounterDaoImpl.class, "counterDao");
 
 	Counter entry = new Counter();
 

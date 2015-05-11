@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import tools.PagedList;
 import tools.StringUtil;
 
@@ -18,7 +21,7 @@ import com.underline.freeproj.orm.AbstractDao;
  * @author liusan.dyf
  */
 public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDao {
-
+	private static final Log logger = LogFactory.getLog("system");
 	private static final String NAMESPACE = "keyValue";
 	private static final String TYPE_CODE = "typeCode";
 	private static final String KEY = "key";
@@ -39,6 +42,7 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 		// ===加载全局设置，从数据库里加载
 		KeyValue kv = this.getOne("50", "globalSettings");
 		if (kv == null) {
+			logger.warn("系统配置为空，加载失败");// 2015-4-30 12:08:28 by liusan.dyf
 			return; // 直接退出
 		}
 

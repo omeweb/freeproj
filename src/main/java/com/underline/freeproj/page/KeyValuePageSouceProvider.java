@@ -66,7 +66,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	 * CachedKeyValueManager的接口
 	 */
 	@Override
-	public String getValueFrom(KeyValue entry) {
+	public String getValueForCache(KeyValue entry) {
 		if (entry == null)
 			return null;
 
@@ -75,7 +75,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 			key = "";
 
 		// 新增：只分析依赖，不解决 2013-09-28 by liusan.dyf
-		analyzeInclude(key, entry.getValue(), false);
+		analyzeIncludes(key, entry.getValue(), false);
 
 		// 如果flag为0表示要追加注释 2013-09-28 by liusan.dyf
 		if (flag == 0) {
@@ -126,28 +126,30 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	/**
 	 * 2015-4-22 21:15:11 by liusan.dyf
 	 * 
-	 * @param url
+	 * @param request
+	 * @param respone
 	 * @param charset
-	 * @param httpResponse
 	 * @return
 	 * @throws IOException
 	 */
 	@Override
-	public boolean output(String url, String charset, HttpServletResponse httpResponse) throws IOException {
-		if (url == null)
+	public boolean output(HttpServletRequest request, HttpServletResponse response, String charset) throws IOException {
+		if (request == null)
 			return false;
+
+		String url = request.getRequestURI();
 
 		String v = this.get(url);
 
 		if (v != null) {
 			if (url.endsWith(".js")) // 一些js我们也放到缓存里去，方便部署和发布 2013-02-28
-				httpResponse.addHeader("Content-Type", "application/x-javascript;charset=" + charset);
+				response.addHeader("Content-Type", "application/x-javascript;charset=" + charset);
 			else if (url.endsWith(".css")) // 2013-04-19 by liusan.dyf
-				httpResponse.addHeader("Content-Type", "text/css; charset=" + charset);
+				response.addHeader("Content-Type", "text/css; charset=" + charset);
 			else if (url.endsWith(".htm") || url.endsWith(".html") || url.endsWith("/"))
-				httpResponse.addHeader("Content-Type", "text/html; charset=" + charset);
+				response.addHeader("Content-Type", "text/html; charset=" + charset);
 
-			httpResponse.getWriter().write(v);
+			response.getWriter().write(v);
 			return true;
 		}
 
@@ -207,7 +209,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	private void refreshValue(String key) {
 		// 分析并解决依赖
 		String value = super.get(key);// 一定要从父类get，本类的get是会判断变化、解决include的
-		String newValue = analyzeInclude(key, value, true);
+		String newValue = analyzeIncludes(key, value, true);
 
 		if (logger.isDebugEnabled())
 			logger.debug(key + "新value：" + newValue);
@@ -234,7 +236,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 		}
 	}
 
-	private String analyzeInclude(final String key, final String value, final boolean resolve) {
+	private String analyzeIncludes(final String key, final String value, final boolean resolve) {
 		// 解决include的问题，有可能依赖项还没有加载，有可能是嵌套依赖 2013-09-26 by liusan.dyf
 
 		final Set<String> dependenceList = new HashSet<String>();
