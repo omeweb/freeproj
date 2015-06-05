@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public interface PageSourceProvider {
-	String get(String key);
+	String getSource(String key);
 
 	boolean output(HttpServletRequest request, HttpServletResponse response, String charset) throws IOException;
 }

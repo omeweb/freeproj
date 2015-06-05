@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import tools.Convert;
 
 import com.underline.freeproj.common.CachedKeyValueProvider;
@@ -28,6 +27,9 @@ import javax.servlet.http.*;
  */
 public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements PageSourceProvider {
 	private static final Log logger = LogFactory.getLog("system");
+	private static String ETAG = "ETag";
+	private static String IF_NONE_MATCH = "If-None-Match";
+
 	private int flag = 0;// 为0表示要追加注释 2014-04-27
 	private String openIncludeTag = "<include>";// 用<>标记，因为：如果解析失败，页面不会显示异常 2014-12-09 by 六三
 	private String closeIncludeTag = "</include>";
@@ -66,7 +68,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	 * CachedKeyValueManager的接口
 	 */
 	@Override
-	public String getValueForCache(KeyValue entry) {
+	public KeyValue adjustingBeforeCache(KeyValue entry) {
 		if (entry == null)
 			return null;
 
@@ -84,12 +86,15 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 					+ entry.getLastOperator() + ", loaded at " + tools.MySqlFunction.now();
 
 			// css、js等资源文件 2013-03-02 by liusan.dyf
-			if (key.endsWith(".js") || key.endsWith(".css"))
-				return entry.getValue() + "\r\n/* " + x + " */";
-			else
-				return entry.getValue() + "\r\n<!-- " + x + " -->";// 其他html等页面文件
+			if (key.endsWith(".js") || key.endsWith(".css")) {
+				entry.setValue(entry.getValue() + "\r\n/* " + x + " */");// 资源文件
+				return entry;
+			} else {
+				entry.setValue(entry.getValue() + "\r\n<!-- " + x + " -->");// 其他html等页面文件
+				return entry;
+			}
 		} else
-			return entry.getValue();
+			return entry;
 	}
 
 	/*------------------------为解决include而新增字段和方法 2013-09-28 by liusan.dyf-------*/
@@ -102,7 +107,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	 */
 	@Override
 	public int refreshAll() {
-		// 调用父类方法
+		// 调用父类方法，已经把内容刷新到了内存里了
 		int i = super.refreshAll();
 
 		// 全部加载结束了，要替换里面的依赖，解决include
@@ -116,11 +121,18 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 				if (logger.isDebugEnabled())
 					logger.debug("检测" + key + "的依赖：" + includes.get(key));
 
-				refreshValue(key);
+				refreshDependentValue(key);
 			}
 		}
 
 		return i;
+	}
+
+	private String generateETagHeaderValue(String s) {
+		StringBuilder sb = new StringBuilder("\"0");
+		sb.append(s);
+		sb.append('"');
+		return sb.toString();
 	}
 
 	/**
@@ -139,9 +151,30 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 
 		String url = request.getRequestURI();
 
-		String v = this.get(url);
+		// 得到etag，这里是对应value的hashcode 2015-6-5 21:24:13 by liusan.dyf
+		// from http://www.infoq.com/cn/articles/etags
+		KeyValue entry = this.get(url);
+		if (entry == null)
+			return false; // 无法处理
+
+		String v = entry.getValue();
 
 		if (v != null) {
+			String etag = generateETagHeaderValue(String.valueOf(v.hashCode()));
+
+			response.setHeader(ETAG, etag); // always store the ETag in the header
+			String requestETag = request.getHeader(IF_NONE_MATCH);
+
+			// 比对etag 2015-6-5 21:32:08 by liusan.dyf
+			if (etag.equals(requestETag)) {
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				response.setHeader("Last-Modified", request.getHeader("If-Modified-Since"));
+				return true;
+			}
+
+			// 你需注意到，我们还设置了Last-Modified头。这被认为是为服务器产生内容的正确形式，因为其迎合了不认识ETag头的客户端。
+
+			// 输出内容
 			if (url.endsWith(".js")) // 一些js我们也放到缓存里去，方便部署和发布 2013-02-28
 				response.addHeader("Content-Type", "application/x-javascript;charset=" + charset);
 			else if (url.endsWith(".css")) // 2013-04-19 by liusan.dyf
@@ -150,6 +183,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 				response.addHeader("Content-Type", "text/html; charset=" + charset);
 
 			response.getWriter().write(v);
+			response.setDateHeader("Last-Modified", entry.getLastUpdateTime().getTime());
 			return true;
 		}
 
@@ -157,8 +191,8 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	}
 
 	@Override
-	public String get(String key) {
-		String value = super.get(key);
+	public KeyValue get(String key) {
+		KeyValue value = super.get(key);
 
 		// 有看自己是否有变化
 		if (changes.contains(key)) {
@@ -200,22 +234,33 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 
 		boolean f = super.reload(key);// 重新加载，因为refreshAll的时候可能对值已经做了替换
 
-		refreshValue(key);// 重新刷新值，解决依赖
+		refreshDependentValue(key);// 重新刷新值，解决依赖
 		markChanges(key);// 该key也发生了变化，继续标记
 
 		return f;
 	}
 
-	private void refreshValue(String key) {
+	/**
+	 * 刷新有依赖的key的value
+	 * 
+	 * @param key
+	 */
+	private void refreshDependentValue(String key) {
+		KeyValue entry = super.get(key);
+		if (entry == null)
+			return;
+
 		// 分析并解决依赖
-		String value = super.get(key);// 一定要从父类get，本类的get是会判断变化、解决include的
+		String value = entry.getValue();// 一定要从父类get，，本类的get是会判断变化、解决include的
 		String newValue = analyzeIncludes(key, value, true);
 
 		if (logger.isDebugEnabled())
 			logger.debug(key + "新value：" + newValue);
 
 		// 存储新值
-		super.getCacheProvider().set(key, newValue, DEFAULT_TTL);
+		entry.setValue(newValue);
+
+		super.getCacheProvider().set(key, entry, DEFAULT_TTL);
 	}
 
 	private void markChanges(String key) {
@@ -256,7 +301,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 						// logger.warn("检测到" + key + "的依赖：" + content);
 
 						if (resolve) {// 如果解决include
-							String value = get(text);
+							String value = getSource(text);
 							if (value == null)
 								logger.warn("不存在的依赖：" + text);
 							return (value == null) ? tools.token.SimpleParser.format(notExistsFormat, text) : value;
@@ -276,6 +321,15 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 			logger.debug((resolve ? "解决" : "分析") + key + "的依赖：" + dependenceList);
 
 		return newValue;
+	}
+
+	@Override
+	public String getSource(String key) {
+		KeyValue entry = this.get(key);
+		if (entry == null)
+			return null;
+
+		return entry.getValue();
 	}
 }
 

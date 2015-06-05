@@ -59,7 +59,7 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 
 		// 缓存
 		for (KeyValue item : pagedList.getList()) {
-			getCacheProvider().set(item.getKey(), getValueForCache(item), DEFAULT_TTL);
+			getCacheProvider().set(item.getKey(), adjustingBeforeCache(item), DEFAULT_TTL);
 
 			if (logger.isDebugEnabled())
 				logger.debug("加载结束：" + typeCode + "." + item.getKey());
@@ -78,8 +78,8 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 	 * @param entry
 	 * @return
 	 */
-	public String getValueForCache(KeyValue entry) {
-		return entry.getValue();
+	public KeyValue adjustingBeforeCache(KeyValue entry) {
+		return entry;
 	}
 
 	/**
@@ -88,8 +88,8 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 	 * @param key
 	 * @return
 	 */
-	public String get(String key) {
-		return (String) getCacheProvider().get(key);
+	public KeyValue get(String key) {
+		return (KeyValue) getCacheProvider().get(key);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 		logger.warn("重新加载" + typeCode + "：" + key);
 
 		KeyValue entry = keyValueDao.getOne(typeCode, key);
-		getCacheProvider().set(entry.getKey(), getValueForCache(entry), DEFAULT_TTL);
+		getCacheProvider().set(entry.getKey(), adjustingBeforeCache(entry), DEFAULT_TTL);
 		return true;
 	}
 
