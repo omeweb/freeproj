@@ -183,7 +183,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 				response.addHeader("Content-Type", "text/html; charset=" + charset);
 
 			response.getWriter().write(v);
-			response.setDateHeader("Last-Modified", entry.getLastUpdateTime().getTime());
+			response.setDateHeader("Last-Modified", tools.DateTime.getDate(365).getTime());
 			return true;
 		}
 
