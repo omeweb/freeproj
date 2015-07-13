@@ -32,6 +32,8 @@ public abstract class AbstractDao<T> {
 	// 0并没有启用
 	private int maxPageSize = 0;// 怕客户端传入过大的pageSize而导致服务器响应慢 2015-1-19 13:37:02 by 六三
 
+	private boolean autoCommit = false;// 可以配置autoCommit 2015-7-13 13:44:14 by liusan.dyf
+
 	/*-------------子类要用到的方法------------*/
 
 	public Session openSession(boolean batch, int tx, boolean autoCommit) {
@@ -102,7 +104,7 @@ public abstract class AbstractDao<T> {
 		onEvent(evtArgs);
 
 		List<T> list;
-		Session session = openSession(false, 0, false);
+		Session session = openSession(false, 0, autoCommit);
 		try {
 			list = (List<T>) session.selectList(getNamespace() + "." + statementId, query);
 			PagedList<T> rtn = new PagedList<T>();
@@ -143,7 +145,7 @@ public abstract class AbstractDao<T> {
 		EventArgs evtArgs = EventArgs.create(query).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
 
-		Session session = openSession(false, 0, false);
+		Session session = openSession(false, 0, autoCommit);
 		try {
 			r = session.selectOne(getNamespace() + "." + statementId, query);
 			onEvent(evtArgs.set("result", r).setType(bizKey + ".after-" + statementId));
@@ -180,7 +182,7 @@ public abstract class AbstractDao<T> {
 		onEvent(evtArgs);
 
 		List<?> r = null;
-		Session session = openSession(false, 0, false);
+		Session session = openSession(false, 0, autoCommit);
 		try {
 			r = (List<?>) session.selectList(getNamespace() + "." + statementId, query);
 			onEvent(evtArgs.set("result", r.size()).setType(bizKey + ".after-" + statementId));
@@ -216,7 +218,7 @@ public abstract class AbstractDao<T> {
 		EventArgs evtArgs = EventArgs.create(param).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
 
-		Session session = openSession(false, 0, false);
+		Session session = openSession(false, 0, autoCommit);
 		try {
 			rtn = session.delete(getNamespace() + "." + statementId, param);
 			onEvent(evtArgs.set("result", rtn).setType(bizKey + ".after-" + statementId));
@@ -242,7 +244,7 @@ public abstract class AbstractDao<T> {
 		EventArgs evtArgs = EventArgs.create(param).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
 
-		Session session = openSession(false, 0, false);
+		Session session = openSession(false, 0, autoCommit);
 		try {
 			rtn = session.update(getNamespace() + "." + statementId, param);
 			onEvent(evtArgs.set("result", rtn).setType(bizKey + ".after-" + statementId));
@@ -304,7 +306,7 @@ public abstract class AbstractDao<T> {
 		EventArgs evtArgs = EventArgs.create(entry).setType(bizKey + ".before-" + statementId);
 		onEvent(evtArgs);
 
-		Session session = openSession(false, 0, false);
+		Session session = openSession(false, 0, autoCommit);
 		try {
 			// 2012-08-13，insert不一定会返回int
 			rtn = session.insert(getNamespace() + "." + statementId, entry);
@@ -354,7 +356,7 @@ public abstract class AbstractDao<T> {
 		int ret = 0;
 
 		String fullStatementId = getNamespace() + "." + statementId;
-		Session session = openSession(true, 0, false);
+		Session session = openSession(true, 0, false);// 这里的autoCommit应该是false 2015-7-13 13:47:35 by liusan.dyf
 		try {
 			// 2012-08-24 by liusan.dyf
 			// client.getDataSource().getConnection().setAutoCommit(false);
@@ -379,5 +381,13 @@ public abstract class AbstractDao<T> {
 
 	public void setMaxPageSize(int maxPageSize) {
 		this.maxPageSize = maxPageSize;
+	}
+
+	public boolean isAutoCommit() {
+		return autoCommit;
+	}
+
+	public void setAutoCommit(boolean autoCommit) {
+		this.autoCommit = autoCommit;
 	}
 }

@@ -2,6 +2,7 @@ package com.underline.freeproj.page;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import tools.Convert;
 
 import com.underline.freeproj.common.CachedKeyValueProvider;
@@ -183,7 +185,12 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 				response.addHeader("Content-Type", "text/html; charset=" + charset);
 
 			response.getWriter().write(v);
-			response.setDateHeader("Last-Modified", tools.DateTime.getDate(365).getTime());
+
+			// tools.DateTime.getDate(365)
+			if (entry.getLastUpdateTime() == null)
+				entry.setLastUpdateTime(new Date(0));
+
+			response.setDateHeader("Last-Modified", entry.getLastUpdateTime().getTime());
 			return true;
 		}
 
