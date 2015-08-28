@@ -111,8 +111,8 @@ public abstract class AbstractDao<T> {
 			rtn.setList(list);
 
 			// 设置count信息
-			if (!query.containsKey("noCount"))// 2013-03-06 by liusan.dyf
-				if (pageIndex == 0) {
+			if (!query.containsKey("noCount")) // 2013-03-06 by liusan.dyf
+				if (pageIndex == 0 || query.containsKey("withCount")) {// 加分支withCount 2015-8-27 10:58:02 by liusan.dyf
 					int c = Convert.toInt(session.selectOne(getNamespace() + ".getCount", query), 0);
 					rtn.setCount(c);
 				}
