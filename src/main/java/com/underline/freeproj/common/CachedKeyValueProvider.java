@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import tools.PagedList;
 import tools.cache.CacheItem;
 import tools.cache.CacheProvider;
+import tools.cache.HashMapCacheProvider;
 
 import org.apache.commons.logging.Log;
 
@@ -21,8 +22,8 @@ import com.underline.freeproj.domain.KeyValue;
  * @author liusan.dyf
  */
 public class CachedKeyValueProvider extends tools.InitializeOnce {
-	private static final Log logger = LogFactory.getLog("system");
 	public static final int DEFAULT_TTL = -1;
+	private static final Log logger = LogFactory.getLog("system");
 
 	/**
 	 * 支持延迟初始化 2012-11-23 by liusan.dyf<br />
@@ -30,9 +31,7 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 	 */
 	// private/* static */AtomicBoolean ready = new AtomicBoolean(false);
 
-	private CacheProvider cacheProvider = new tools.cache.HashMapCacheProvider(
-			new ConcurrentHashMap<String, CacheItem>());
-
+	private CacheProvider cacheProvider = new HashMapCacheProvider(new ConcurrentHashMap<String, CacheItem>());
 	private KeyValueDao keyValueDao;
 	private String typeCode = null;
 
@@ -93,13 +92,23 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 	}
 
 	/**
+	 * 从后端数据源处获取并做调整 2015-9-2 10:50:32 by liusan.dyf
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public KeyValue getFromBackendAndAdjust(String key) {
+		return adjustingBeforeCache(keyValueDao.getOne(typeCode, key));
+	}
+
+	/**
 	 * 这里不会从KV里删除 2013-09-28 by liusan.dyf
 	 * 
 	 * @param key
 	 * @return
 	 */
 	public boolean remove(String key) {
-		if (!this.isInitialized())// 如果还没有准备好，则不执行 2013-03-08 by liusan.dyf
+		if (!this.isInitialized()) // 如果还没有准备好，则不执行 2013-03-08 by liusan.dyf
 			return false;
 
 		logger.warn("删除" + typeCode + "：" + key);
@@ -110,13 +119,16 @@ public class CachedKeyValueProvider extends tools.InitializeOnce {
 	}
 
 	public boolean reload(String key) {
-		if (!this.isInitialized())// 如果还没有准备好，则不执行 2013-03-08 by liusan.dyf
+		if (!this.isInitialized()) // 如果还没有准备好，则不执行 2013-03-08 by liusan.dyf
 			return false;
 
 		logger.warn("重新加载" + typeCode + "：" + key);
 
-		KeyValue entry = keyValueDao.getOne(typeCode, key);
-		getCacheProvider().set(entry.getKey(), adjustingBeforeCache(entry), DEFAULT_TTL);
+		KeyValue entry = getFromBackendAndAdjust(key);
+		if (entry == null)
+			return false;
+
+		getCacheProvider().set(entry.getKey(), entry, DEFAULT_TTL);
 		return true;
 	}
 

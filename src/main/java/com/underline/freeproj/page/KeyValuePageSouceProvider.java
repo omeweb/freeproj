@@ -31,6 +31,8 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 	private static final Log logger = LogFactory.getLog("system");
 	private static String ETAG = "ETag";
 	private static String IF_NONE_MATCH = "If-None-Match";
+	private static String LAST_MODIFIED = "Last-Modified";
+	private static String CONTENT_TYPE = "Content-Type";
 
 	private int flag = 0;// 为0表示要追加注释 2014-04-27
 	private String openIncludeTag = "<include>";// 用<>标记，因为：如果解析失败，页面不会显示异常 2014-12-09 by 六三
@@ -170,7 +172,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 			// 比对etag 2015-6-5 21:32:08 by liusan.dyf
 			if (etag.equals(requestETag)) {
 				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-				response.setHeader("Last-Modified", request.getHeader("If-Modified-Since"));
+				response.setHeader(LAST_MODIFIED, request.getHeader("If-Modified-Since"));
 				return true;
 			}
 
@@ -178,11 +180,11 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 
 			// 输出内容
 			if (url.endsWith(".js")) // 一些js我们也放到缓存里去，方便部署和发布 2013-02-28
-				response.addHeader("Content-Type", "application/x-javascript;charset=" + charset);
+				response.addHeader(CONTENT_TYPE, "application/x-javascript; charset=" + charset);
 			else if (url.endsWith(".css")) // 2013-04-19 by liusan.dyf
-				response.addHeader("Content-Type", "text/css; charset=" + charset);
+				response.addHeader(CONTENT_TYPE, "text/css; charset=" + charset);
 			else if (url.endsWith(".htm") || url.endsWith(".html") || url.endsWith("/"))
-				response.addHeader("Content-Type", "text/html; charset=" + charset);
+				response.addHeader(CONTENT_TYPE, "text/html; charset=" + charset);
 
 			response.getWriter().write(v);
 
@@ -190,7 +192,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 			if (entry.getLastUpdateTime() == null)
 				entry.setLastUpdateTime(new Date(0));
 
-			response.setDateHeader("Last-Modified", entry.getLastUpdateTime().getTime());
+			response.setDateHeader(LAST_MODIFIED, entry.getLastUpdateTime().getTime());
 			return true;
 		}
 
@@ -324,7 +326,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 		// 加入依赖库，并覆盖旧的值
 		includes.put(key, dependenceList);
 
-		if (logger.isDebugEnabled())// 当作debug的日志 2014-12-09 by 六三
+		if (logger.isDebugEnabled()) // 当作debug的日志 2014-12-09 by 六三
 			logger.debug((resolve ? "解决" : "分析") + key + "的依赖：" + dependenceList);
 
 		return newValue;
