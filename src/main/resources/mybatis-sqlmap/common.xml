@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="common">
 	<!--2013-11-27 by liusan.dyf-->
 	<sql id="sql">
-		$value$
+		${value}
 	</sql>
 	
 	<select id="getObject" parameterType="String" resultType="Object">
