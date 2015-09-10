@@ -2,7 +2,6 @@ package com.underline.freeproj.page;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -29,22 +28,10 @@ import javax.servlet.http.*;
  */
 public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements PageSourceProvider {
 	private static final Log logger = LogFactory.getLog("system");
-	private static String ETAG = "ETag";
-	private static String IF_NONE_MATCH = "If-None-Match";
-	private static String LAST_MODIFIED = "Last-Modified";
-	private static String CONTENT_TYPE = "Content-Type";
 
-	private int flag = 0;// 为0表示要追加注释 2014-04-27
+	private boolean outputWithComment = true;// 表示要追加注释 2014-04-27
 	private String openIncludeTag = "<include>";// 用<>标记，因为：如果解析失败，页面不会显示异常 2014-12-09 by 六三
 	private String closeIncludeTag = "</include>";
-
-	public int getFlag() {
-		return flag;
-	}
-
-	public void setFlag(int flag) {
-		this.flag = flag;
-	}
 
 	public String getOpenIncludeTag() {
 		return openIncludeTag;
@@ -83,8 +70,8 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 		// 新增：只分析依赖，不解决 2013-09-28 by liusan.dyf
 		analyzeIncludes(key, entry.getValue(), false);
 
-		// 如果flag为0表示要追加注释 2013-09-28 by liusan.dyf
-		if (flag == 0) {
+		// 表示要追加注释 2013-09-28 by liusan.dyf
+		if (outputWithComment) {
 			// 一些备注、调试信息
 			String x = tools.StringUtil.LOCAL_HOST + " @ " + Convert.toString(entry.getLastUpdateTime()) + " by "
 					+ entry.getLastOperator() + ", loaded at " + tools.MySqlFunction.now();
@@ -132,13 +119,6 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 		return i;
 	}
 
-	private String generateETagHeaderValue(String s) {
-		StringBuilder sb = new StringBuilder("\"0");
-		sb.append(s);
-		sb.append('"');
-		return sb.toString();
-	}
-
 	/**
 	 * 2015-4-22 21:15:11 by liusan.dyf
 	 * 
@@ -162,41 +142,7 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 			return false; // 无法处理
 
 		String v = entry.getValue();
-
-		if (v != null) {
-			String etag = generateETagHeaderValue(String.valueOf(v.hashCode()));
-
-			response.setHeader(ETAG, etag); // always store the ETag in the header
-			String requestETag = request.getHeader(IF_NONE_MATCH);
-
-			// 比对etag 2015-6-5 21:32:08 by liusan.dyf
-			if (etag.equals(requestETag)) {
-				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-				response.setHeader(LAST_MODIFIED, request.getHeader("If-Modified-Since"));
-				return true;
-			}
-
-			// 你需注意到，我们还设置了Last-Modified头。这被认为是为服务器产生内容的正确形式，因为其迎合了不认识ETag头的客户端。
-
-			// 输出内容
-			if (url.endsWith(".js")) // 一些js我们也放到缓存里去，方便部署和发布 2013-02-28
-				response.addHeader(CONTENT_TYPE, "application/x-javascript; charset=" + charset);
-			else if (url.endsWith(".css")) // 2013-04-19 by liusan.dyf
-				response.addHeader(CONTENT_TYPE, "text/css; charset=" + charset);
-			else if (url.endsWith(".htm") || url.endsWith(".html") || url.endsWith("/"))
-				response.addHeader(CONTENT_TYPE, "text/html; charset=" + charset);
-
-			response.getWriter().write(v);
-
-			// tools.DateTime.getDate(365)
-			if (entry.getLastUpdateTime() == null)
-				entry.setLastUpdateTime(new Date(0));
-
-			response.setDateHeader(LAST_MODIFIED, entry.getLastUpdateTime().getTime());
-			return true;
-		}
-
-		return false;
+		return tools.web.ServletUtil.output(request, response, v, charset, entry.getLastUpdateTime());
 	}
 
 	@Override
@@ -339,6 +285,14 @@ public class KeyValuePageSouceProvider extends CachedKeyValueProvider implements
 			return null;
 
 		return entry.getValue();
+	}
+
+	public boolean isOutputWithComment() {
+		return outputWithComment;
+	}
+
+	public void setOutputWithComment(boolean outputWithComment) {
+		this.outputWithComment = outputWithComment;
 	}
 }
 

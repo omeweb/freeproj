@@ -16,7 +16,7 @@ public class PageProviderTest {
 	static {
 		provider = new KeyValuePageSouceProvider();
 		provider.setKeyValueDao(new KV());
-		provider.setFlag(1);
+		provider.setOutputWithComment(false);
 		provider.init();
 	}
 
