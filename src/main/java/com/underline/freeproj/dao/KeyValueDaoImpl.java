@@ -36,13 +36,16 @@ public class KeyValueDaoImpl extends AbstractDao<KeyValue> implements KeyValueDa
 	private String key = "common_key_value";
 
 	/**
-	 * 转移到kvdao里面 2015-4-21 10:06:13 by 六三
+	 * 转移到kvdao里面 2015-4-21 10:06:13 by 六三 <br />
+	 * 后面逐步废弃 2016-1-14 11:15:09 by liusan.dyf
 	 */
 	public void loadSettings() {
 		// ===加载全局设置，从数据库里加载
-		KeyValue kv = this.getOne("50", "globalSettings");
+		String settingTypeCode = "50";
+		String settingsKey = "globalSettings";
+		KeyValue kv = this.getOne(settingTypeCode, settingsKey);
 		if (kv == null) {
-			logger.warn("系统配置为空，加载失败");// 2015-4-30 12:08:28 by liusan.dyf
+			logger.warn("系统配置为空" + settingTypeCode + "." + settingsKey + "，加载失败");// 2015-4-30 12:08:28 by liusan.dyf
 			return; // 直接退出
 		}
 

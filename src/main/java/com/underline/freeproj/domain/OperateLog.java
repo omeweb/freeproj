@@ -17,7 +17,7 @@ public class OperateLog {
 	private String content;
 	private String result;
 	private String operationCode;
-	private int system;
+	private int systemId;
 	private String ip;
 	private String title;
 
@@ -87,14 +87,6 @@ public class OperateLog {
 		this.operationCode = operationCode;
 	}
 
-	public int getSystem() {
-		return system;
-	}
-
-	public void setSystem(int system) {
-		this.system = system;
-	}
-
 	public String getIp() {
 		return ip;
 	}
@@ -125,6 +117,14 @@ public class OperateLog {
 
 	public void setRevision(int revision) {
 		this.revision = revision;
+	}
+
+	public int getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(int systemId) {
+		this.systemId = systemId;
 	}
 
 }

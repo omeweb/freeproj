@@ -16,7 +16,7 @@ public class KeyValue {
 	private int status;
 	private String comment;
 	private String reservedValue;
-
+	private Date createTime;
 	/**
 	 * 2012-09-26 by liusan.dyf
 	 */
@@ -143,5 +143,13 @@ public class KeyValue {
 		if (sortNumber == null)
 			return;// 2014-11-17 by 六三
 		this.sortNumber = sortNumber;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

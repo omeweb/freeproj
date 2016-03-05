@@ -24,7 +24,7 @@ public class OperateLogTest extends BaseTest {
 		entry.setUserName("wuchen.lx");
 		// entry.setResult("success");
 		entry.setOperationCode("del");
-		entry.setSystem(110);
+		entry.setSystemId(110);
 		entry.setIp("127.0.0.1");
 		entry.setTitle("{postId:29,revision:1}");
 		System.out.println(dao.add(entry));

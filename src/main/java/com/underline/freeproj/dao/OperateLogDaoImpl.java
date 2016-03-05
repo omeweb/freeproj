@@ -6,10 +6,6 @@ import com.underline.freeproj.domain.OperateLog;
 import com.underline.freeproj.orm.AbstractDao;
 
 public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
-	/**
-	 * 系统编号
-	 */
-	private int systemId = 100;
 
 	public int add(OperateLog entry) {
 		return tools.Convert.toInt(super.insert(entry), 0);
@@ -23,6 +19,7 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	/**
 	 * 简化版的添加日志，title和content都不是必须的，2015-5-10 14:56:07 by liusan.dyf
 	 * 
+	 * @param systemId
 	 * @param userId
 	 * @param userName
 	 * @param code
@@ -30,12 +27,13 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	 * @param result
 	 * @param ip
 	 */
-	public void addSimple(long userId, String userName, String code, String targetKey, Object result, String ip) {
+	public void addSimple(int systemId, long userId, String userName, String code, String targetKey, Object result,
+			String ip) {
 		OperateLog entry = new OperateLog();
 		entry.setOperationCode(code);
 		entry.setTargetKey(targetKey);
 
-		entry.setSystem(systemId);
+		entry.setSystemId(systemId);
 		entry.setIp(ip);
 
 		entry.setUserId(userId);
@@ -76,6 +74,7 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	/**
 	 * 2012-05-24 by liusan.dyf
 	 * 
+	 * @param systemId
 	 * @param title eg 修改了文章《淘宝规则》
 	 * @param content eg 文章内容
 	 * @param code eg catalog.after-add
@@ -83,13 +82,13 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 	 * @param result 操作的结果
 	 * @param r
 	 */
-	public void add(String title, String content, String code, String targetKey, Object result, int r) {
+	public void add(int systemId, String title, String content, String code, String targetKey, Object result, int r) {
 		OperateLog entry = new OperateLog();
 		entry.setTitle(title);
 		entry.setContent(content);
 		entry.setOperationCode(code);
 		entry.setTargetKey(targetKey);
-		entry.setSystem(systemId);
+		entry.setSystemId(systemId);
 
 		if (r >= 0)
 			entry.setRevision(r);// 2014-07-11 by liusan.dyf
@@ -111,15 +110,7 @@ public class OperateLogDaoImpl extends AbstractDao<OperateLog> {
 		// }
 	}
 
-	public void add(String title, String content, String code, String targetKey, Object result) {
-		add(title, content, code, targetKey, result, -1);
-	}
-
-	public int getSystemId() {
-		return systemId;
-	}
-
-	public void setSystemId(int v) {
-		systemId = v;
+	public void add(int systemId, String title, String content, String code, String targetKey, Object result) {
+		add(systemId, title, content, code, targetKey, result, -1);
 	}
 }

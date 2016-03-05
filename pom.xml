@@ -13,7 +13,7 @@
 	<artifactId>freeproj</artifactId>
 	<packaging>jar</packaging>
 	<name>freeproj</name>
-	<version>3.0-SNAPSHOT</version>
+	<version>3.1-SNAPSHOT</version>
 	
 	<properties>
 		<java-version>1.6</java-version>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.35</version>
+			<version>5.1.38</version>
 		</dependency>	
 		
 		<!--tools-->

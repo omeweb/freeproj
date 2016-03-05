@@ -8,8 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   	<insert id="insert"  parameterType="OperateLog">
 		<!--插入主表-->
 		INSERT INTO common_operate_log
-		(`userId`,`userName`,`title`,`content`,`result`,`operationCode`,`system`,`ip`,`targetKey`,`revision`)
-		VALUES(#{userId},#{userName},#{title},#{content},#{result},#{operationCode},#{system},#{ip},#{targetKey},#{revision});
+		(`userId`,`userName`,`title`,`content`,`result`,`operationCode`,`systemId`,`ip`,`targetKey`,`revision`)
+		VALUES(#{userId},#{userName},#{title},#{content},#{result},#{operationCode},#{systemId},#{ip},#{targetKey},#{revision});
 		<selectKey resultType="int" order="AFTER" keyProperty="id">
       		select LAST_INSERT_ID() as value
     	</selectKey>
@@ -28,6 +28,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</foreach>
 	  </if>
 		
+		<!-- 2016-1-6 18:15:43 by liusan.dyf -->
+		<if test="systemId != null and systemId != 0"> and `systemId`=#{systemId} </if>
+		
 		<if test="id != null"> and `id`=#{id} </if>
 		<if test="userId != null and userId != 0"> and `userId`=#{userId} </if>
 		<if test="userName != null"> and `userName`=#{userName} </if>
@@ -36,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="result != null"> and `result`=#{result} </if>
 		<if test="strictOperationCode != null"> and `operationCode`=#{strictOperationCode} </if>
 		<if test="operationCode != null"> and `operationCode` like CONCAT(#{operationCode},'%') </if>
-		<if test="system != null and system != 0"> and `system`=#{system} </if>
+		
 		<if test="ip != null"> and `ip`=#{ip} </if>
 		<if test="targetKey != null"> and `targetKey`=#{targetKey} </if>
 		<if test="revision != null and revision != 0"> and `revision`=#{revision} </if>
@@ -51,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			null as 
 		</if>
 		`content`,		
-		`result`,`operationCode`,`system`,`ip`,`title`,`targetKey`,`revision`
+		`result`,`operationCode`,`systemId`,`ip`,`title`,`targetKey`,`revision`
 		FROM `common_operate_log` where 1 = 1
 		<include refid="selectClause"/>
 		order by `id` desc
